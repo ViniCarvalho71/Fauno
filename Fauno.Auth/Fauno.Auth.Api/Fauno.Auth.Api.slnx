@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="../Fauno.Auth.Domain/Fauno.Auth.Domain.csproj" />
+  <Project Path="../Fauno.Auth.Repository/Fauno.Auth.Repository.csproj" />
   <Project Path="Fauno.Auth.Api.csproj" />
 </Solution>
