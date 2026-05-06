@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fauno.Auth.Domain\Fauno.Auth.Domain.csproj" />
+    <ProjectReference Include="..\Fauno.Auth.Repository\Fauno.Auth.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
