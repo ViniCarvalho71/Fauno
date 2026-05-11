@@ -1,5 +1,5 @@
+using Fauno.Auth.Application.Interfaces;
 using Fauno.Auth.Infrastructure.Data.Context;
-using Fauno.Auth.Infrastructure.Interfaces;
 using Fauno.Auth.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

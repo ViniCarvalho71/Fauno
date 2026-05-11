@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fauno.Auth.Application\Fauno.Auth.Application.csproj" />
+    <ProjectReference Include="..\Fauno.Auth.Repository\Fauno.Auth.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

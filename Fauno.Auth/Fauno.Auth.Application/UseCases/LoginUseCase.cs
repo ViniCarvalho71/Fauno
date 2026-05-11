@@ -1,6 +1,7 @@
-﻿using Fauno.Auth.Domain.ViewModels.Requests;
+﻿using Fauno.Auth.Application.Interfaces;
+using Fauno.Auth.Domain.ValueObjects;
+using Fauno.Auth.Domain.ViewModels.Requests;
 using Fauno.Auth.Domain.ViewModels.Responses;
-using Fauno.Auth.Infrastructure.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,17 +16,30 @@ namespace Fauno.Auth.Application.UseCases
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public LoginUseCase(IUserRepository userRepository, IConfiguration configuration)
+        public LoginUseCase(IUserRepository userRepository, IConfiguration configuration, IPasswordHasher passwordHashe )
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _passwordHasher = passwordHashe;
         }
 
         public LoginReponseVm Run(LoginRequestVm loginData)
         {
-            var isValid = _userRepository.Login(loginData.Email, loginData.Password);
-            if (!isValid)
+            var password = new Password(loginData.Password);
+
+            var user = _userRepository.GetUserByEmail(loginData.Email);
+
+            if (user == null)
+                return null;
+
+            var passwordValid = _passwordHasher.Verify(
+                password.Value,
+                user.Password.Value
+            );
+
+            if (!passwordValid)
                 return null;
 
             var secretKey = _configuration["JwtSettings:Secret"];
@@ -39,7 +53,8 @@ namespace Fauno.Auth.Application.UseCases
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, loginData.Email),
-                    new Claim(ClaimTypes.Email, loginData.Email)
+                    new Claim(ClaimTypes.Email, loginData.Email),
+                    new Claim("google_access_token", user.GoogleToken)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(expirationInMinutes),
                 Issuer = issuer,

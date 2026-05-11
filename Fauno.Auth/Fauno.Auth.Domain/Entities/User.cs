@@ -9,5 +9,6 @@ namespace Fauno.Auth.Domain.Entities
     {
         public Email Email { get; set; }
         public Password Password { get; set; }
+        public string GoogleToken { get; set; }
     }
 }
