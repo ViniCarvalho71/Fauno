@@ -15,7 +15,7 @@ namespace Fauno.Auth.Domain.ValueObjects
                 throw new Exception("A senha deve ter no mínimo 8 caracteres");
             }
 
-            if(Regex.IsMatch(value, "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).+$"))
+            if(!Regex.IsMatch(value, "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).+$"))
             {
                 throw new Exception("Senha inválida");
             }

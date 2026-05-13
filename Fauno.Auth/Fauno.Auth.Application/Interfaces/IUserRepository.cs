@@ -9,6 +9,6 @@ namespace Fauno.Auth.Application.Interfaces
     {
         User GetUserByEmail(string email);
         User GetUsertById(long id);
-        void UpdateUser(User user);
+        long CreateUser(User user);
     }
 }

@@ -8,7 +8,7 @@ namespace Fauno.Auth.Infrastructure.Data.Context
 {
     public class Context : DbContext
     {
-        public DbSet<User> Users;
+        public DbSet<User> Users { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -16,8 +16,20 @@ namespace Fauno.Auth.Infrastructure.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasKey(usr => usr.Id);
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.OwnsOne(x => x.Email, email =>
+                {
+                    email.Property(e => e.Value)
+                        .HasColumnName("Email")
+                        .IsRequired();
+                });
+
+                entity.Property(x => x.PasswordHash)
+                    .IsRequired();
+            });
 
             base.OnModelCreating(modelBuilder);
         }
