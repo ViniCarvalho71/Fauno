@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="Fauno.Agenda.Api.csproj" />
-  <Project Path="Fauno.Agenda.Infra/Fauno.Agenda.Infra.csproj" Id="9375dd55-04f9-45f6-9579-0364e7b326b9" />
-</Solution>
