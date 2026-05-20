@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fauno.Agenda.Application\Fauno.Agenda.Application.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -12,22 +12,22 @@ namespace Fauno.Agenda.Domain.Entities
         public AppointmentStatus Status { get; private set; }
         public  Guid OwnerId { get; private set; }
         public Guid PetId { get; private set; }
-        public Guid ScheduleId { get; private set; }
-        public Schedule Schedule { get; private set; }
+        public DateTime Start {  get; private set; }
+        public DateTime End { get; private set; }
 
         protected Appointment()
         {
 
         }
-        internal Appointment(string? description, string? title, Guid ownerId, Guid petId, Schedule schedule)
+        public Appointment(string? description, string? title, Guid ownerId, Guid petId, DateTime start, DateTime end)
         {
             Title = title;
             Description = description;
             Status = AppointmentStatus.Scheduled;
             OwnerId = ownerId;
             PetId = petId;
-            ScheduleId = schedule.Id;
-            Schedule = schedule;
+            Start = start;
+            End = end;
             if (Title == null)
                 Title = $"Consulta";
             if (Description == null)
