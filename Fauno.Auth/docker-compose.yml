@@ -27,7 +27,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__Default: server=db;port=3306;database=faunoauthdb;user=root;password=root;Persist Security Info=False;Convert Zero Datetime=True;SslMode=None
     ports:
