@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Fauno.Auth",
+    "\\Fauno.Auth\\Fauno.Auth.Api"
   ],
-  "SelectedNode": "\\Fauno.Auth.Api.slnx",
+  "SelectedNode": "\\Fauno.Auth\\Fauno.Auth.Api\\Fauno.Auth.Api.slnx",
   "PreviewInSolutionExplorer": false
 }

@@ -1,0 +1,37 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: fauno-auth-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: faunoauthdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - faunoauth_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fauno-auth-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Default: server=db;port=3306;database=faunoauthdb;user=root;password=root;Persist Security Info=False;Convert Zero Datetime=True;SslMode=None
+    ports:
+      - "8080:8080"
+
+volumes:
+  faunoauth_mysql_data:
