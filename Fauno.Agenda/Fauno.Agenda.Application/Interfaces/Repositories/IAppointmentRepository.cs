@@ -8,5 +8,6 @@ namespace Fauno.Agenda.Application.Interfaces.Repositories
     public interface IAppointmentRepository
     {
         void Add(Appointment appointment);
+        bool VerifyTimeRange(DateTime start, DateTime end);
     }
 }

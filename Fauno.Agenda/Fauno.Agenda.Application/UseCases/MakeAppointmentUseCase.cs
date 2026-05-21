@@ -29,6 +29,11 @@ namespace Fauno.Agenda.Application.UseCases
                 throw new Exception("Dono de pet inválido");
             if (!petExisted)
                 throw new Exception("Pet inválido");
+
+            bool Available = _appointmentRepository.VerifyTimeRange(appointmentDto.Start, appointmentDto.End);
+            
+            if(!Available)
+                throw new Exception("Horário indisponível");
             
             Appointment NewAppointment = new Appointment(
                 appointmentDto.Description,

@@ -10,6 +10,13 @@ namespace Fauno.Agenda.Infrastructure.Repositories
     {
         public void Add(Appointment appointment)
         {
+            // Aqui é para adicionar um registro ao banco
+            throw new NotImplementedException();
+        }
+
+        public bool VerifyTimeRange(DateTime start, DateTime end)
+        {
+            // Aqui você pode implementar a lógica para verificar se o intervalo de tempo está disponível. basicamente é verificar dentro de um when se existe algum agendamento que se sobreponha com o intervalo fornecido.
             throw new NotImplementedException();
         }
     }
