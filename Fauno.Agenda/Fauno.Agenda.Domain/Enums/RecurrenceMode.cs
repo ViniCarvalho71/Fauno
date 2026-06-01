@@ -4,12 +4,9 @@ using System.Text;
 
 namespace Fauno.Agenda.Domain.Enums
 {
-    public enum AppointmentStatus
+    public enum RecurrenceMode
     {
-        Scheduled,
-        Confirmed,
-        Cancelled,
-        Finished
-
+        Weekly,
+        SpecificDates
     }
 }

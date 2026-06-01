@@ -1,3 +1,5 @@
+using Fauno.Agenda.Application.DTOs;
+using Fauno.Agenda.Application.UseCases;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fauno.Agenda.Api.Controllers
@@ -6,11 +8,24 @@ namespace Fauno.Agenda.Api.Controllers
     [Route("[controller]")]
     public class AppointmentController : ControllerBase
     {
+        private readonly MakeAppointmentUseCase _makeAppointmentUseCase;
+        public AppointmentController(MakeAppointmentUseCase makeAppointmentUseCase)
+        { 
+            _makeAppointmentUseCase = makeAppointmentUseCase;
+        }
       
         [HttpPost()]
-        public IActionResult MakeAppointment()
+        public IActionResult MakeAppointment(AppointmentDto requestDto)
         {
-            return Ok();
+            try
+            {
+                _makeAppointmentUseCase.RunAsync(requestDto);
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpGet()]
         public IActionResult CancelAppointment()

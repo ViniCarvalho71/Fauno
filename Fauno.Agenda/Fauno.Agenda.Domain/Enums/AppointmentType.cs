@@ -4,12 +4,11 @@ using System.Text;
 
 namespace Fauno.Agenda.Domain.Enums
 {
-    public enum AppointmentStatus
+    public enum AppointmentType
     {
-        Scheduled,
-        Confirmed,
-        Cancelled,
-        Finished
-
+        Consultation,
+        Return,
+        Vaccination,
+        Exam
     }
 }

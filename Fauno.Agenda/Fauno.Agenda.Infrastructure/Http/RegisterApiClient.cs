@@ -21,5 +21,12 @@ namespace Fauno.Agenda.Infrastructure.Http
 
             return response?["existed"] ?? false;
         }
+
+        public async Task<bool> VeterinarianExists(Guid veterinarianId)
+        {
+            var response = await _http.GetFromJsonAsync<Dictionary<string, bool>>($"veterinarian/{veterinarianId}/exists");
+
+            return response?["existed"] ?? false;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Fauno.Agenda.Domain.Enums;
+using Fauno.Agenda.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,9 +38,9 @@ namespace Fauno.Agenda.Domain.Entities
         public void Cancel()
         {
             if (Status == AppointmentStatus.Cancelled)
-                throw new Exception("Consulta já cancelada");
+                throw new DomainException("Consulta já cancelada");
             if (Status == AppointmentStatus.Finished)
-                throw new Exception("Consulta já finalizada");
+                throw new DomainException("Consulta já finalizada");
             Status = AppointmentStatus.Cancelled;
         }
     }
