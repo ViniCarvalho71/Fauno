@@ -1,7 +1,0 @@
-**/.vs
-**/.git
-**/.idea
-**/bin
-**/obj
-**/*.user
-**/node_modules
