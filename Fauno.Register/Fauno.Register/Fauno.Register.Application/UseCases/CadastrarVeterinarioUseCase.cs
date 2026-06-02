@@ -21,7 +21,7 @@ public class CadastrarVeterinarioUseCase
         _vetRepository = vetRepository;
     }
 
-    public async Task<Veterinario> ExecutarAsync(CadastrarVeterinarioRequest request)
+    public async Task<Veterinario> Run(CadastrarVeterinarioRequest request)
     {
         var cpfLimpo = request.Cpf.Replace(".", "").Replace("-", "");
 

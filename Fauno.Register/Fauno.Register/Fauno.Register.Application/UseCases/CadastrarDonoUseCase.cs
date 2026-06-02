@@ -21,7 +21,7 @@ public class CadastrarDonoUseCase
         _donoRepository = donoRepository;
     }
 
-    public async Task<Dono> ExecutarAsync(CadastrarDonoRequest request)
+    public async Task<Dono> Run(CadastrarDonoRequest request)
     {
         var cpfLimpo = request.Cpf.Replace(".", "").Replace("-", "");
 

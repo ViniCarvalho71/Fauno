@@ -21,7 +21,7 @@ public class VeterinarioController : ControllerBase
     {
         try
         {
-            var vet = await _useCase.ExecutarAsync(request);
+            var vet = await _useCase.Run(request);
             return Created($"/api/cadastros/veterinarios/{vet.Id}", new { vet.Id, vet.Nome, Cpf = vet.Cpf.Numero });
         }
         catch (Exception ex)

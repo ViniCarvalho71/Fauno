@@ -21,7 +21,7 @@ public class DonoController : ControllerBase
     {
         try
         {
-            var dono = await _useCase.ExecutarAsync(request);
+            var dono = await _useCase.Run(request);
             return Created($"/api/cadastros/donos/{dono.Id}", new { dono.Id, dono.Nome, Cpf = dono.Cpf.Numero });
         }
         catch (Exception ex)
