@@ -1,23 +1,68 @@
-﻿using Fauno.Agenda.Application.Interfaces.Repositories;
-using Fauno.Agenda.Domain.Entities;
+﻿using Fauno.Agenda.Domain.Entities;
+using Fauno.Agenda.Domain.Enums;
+using Fauno.Agenda.Domain.Interfaces.Repositories;
+using Fauno.Agenda.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Fauno.Agenda.Infrastructure.Repositories
 {
-    internal class AppointmentRepository : IAppointmentRepository
+    public class AppointmentRepository : IAppointmentRepository
     {
-        public void Add(Appointment appointment)
+        private readonly AgendaDbContext _context;
+
+        public AppointmentRepository(AgendaDbContext context)
         {
-            // Aqui é para adicionar um registro ao banco
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public bool VerifyTimeRange(DateTime start, DateTime end)
+        public async Task AddAsync(Appointment appointment)
         {
-            // Aqui você pode implementar a lógica para verificar se o intervalo de tempo está disponível. basicamente é verificar dentro de um when se existe algum agendamento que se sobreponha com o intervalo fornecido.
-            throw new NotImplementedException();
+            await _context.Appointments.AddAsync(appointment);
+            await _context.SaveChangesAsync();
         }
+
+        public async Task<Appointment?> GetByIdAsync(Guid id) =>
+            await _context.Appointments
+                .FirstOrDefaultAsync(a => a.Id == id && a.RemovedAt == null);
+
+        public async Task<IEnumerable<Appointment>> GetByVeterinarianIdAsync(Guid veterinarianId) =>
+            await _context.Appointments
+                .Where(a => a.VeterinarianId == veterinarianId && a.RemovedAt == null)
+                .ToListAsync();
+
+        public async Task<bool> HasConflictAsync(Guid veterinarianId, DateTime start, DateTime end) =>
+            await _context.Appointments
+                .AnyAsync(a =>
+                    a.VeterinarianId == veterinarianId &&
+                    a.RemovedAt == null &&
+                    a.Status != AppointmentStatus.Cancelled &&
+                    a.Start < end && a.End > start);
+    
+        public async Task<IEnumerable<Appointment>> GetByVeterinarianAndDateAsync(Guid veterinarianId, DateOnly date)
+        {
+            var start = date.ToDateTime(TimeOnly.MinValue);
+            var end = date.ToDateTime(TimeOnly.MaxValue);
+
+            return await _context.Appointments
+                .Where(a =>
+                    a.VeterinarianId == veterinarianId &&
+                    a.RemovedAt == null &&
+                    a.Status != AppointmentStatus.Cancelled &&
+                    a.Start >= start && a.Start < end)
+                .ToListAsync();
+        }
+        public async Task UpdateAsync(Appointment appointment)
+        {
+            _context.Appointments.Update(appointment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetByOwnerIdAsync(Guid ownerId) =>
+            await _context.Appointments
+                .Where(a => a.OwnerId == ownerId && a.RemovedAt == null)
+                .ToListAsync();
     }
 }

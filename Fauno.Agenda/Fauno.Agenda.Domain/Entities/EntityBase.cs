@@ -15,11 +15,11 @@ namespace Fauno.Agenda.Domain.Entities
         public EntityBase()
         {
             Id = Guid.NewGuid();
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
         public void Remove() 
         {
-            RemovedAt = DateTime.Now;
+            RemovedAt = DateTime.UtcNow;
         }
     }
 }

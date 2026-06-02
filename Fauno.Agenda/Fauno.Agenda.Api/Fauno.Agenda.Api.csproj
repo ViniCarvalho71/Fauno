@@ -7,12 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.Docker.json" />    
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.14.14" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Fauno.Agenda.Application\Fauno.Agenda.Application.csproj" />
     <ProjectReference Include="..\Fauno.Agenda.Infrastructure\Fauno.Agenda.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.Docker.json" />
   </ItemGroup>
 
 </Project>

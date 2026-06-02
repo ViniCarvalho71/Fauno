@@ -6,11 +6,11 @@ using System.Text;
 
 namespace Fauno.Agenda.Application.UseCases
 {
-    public class CancelAppointmentUseCase
+    public class ConfirmAppointmentUseCase
     {
         private readonly IAppointmentRepository _appointmentRepository;
 
-        public CancelAppointmentUseCase(IAppointmentRepository appointmentRepository)
+        public ConfirmAppointmentUseCase(IAppointmentRepository appointmentRepository)
         {
             _appointmentRepository = appointmentRepository;
         }
@@ -22,7 +22,7 @@ namespace Fauno.Agenda.Application.UseCases
             if (appointment is null)
                 throw new DomainException("Consulta não encontrada.");
 
-            appointment.Cancel();
+            appointment.Confirm();
             await _appointmentRepository.UpdateAsync(appointment);
         }
     }

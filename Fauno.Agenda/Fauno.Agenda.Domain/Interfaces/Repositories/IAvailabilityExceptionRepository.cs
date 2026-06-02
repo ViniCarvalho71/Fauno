@@ -6,5 +6,6 @@ namespace Fauno.Agenda.Domain.Interfaces.Repositories
     {
         Task AddAsync(AvailabilityException exception);
         Task<IEnumerable<AvailabilityException>> GetByVeterinarianIdAsync(Guid veterinarianId);
+        Task<bool> ExistsForDateAsync(Guid veterinarianId, DateOnly date);
     }
 }

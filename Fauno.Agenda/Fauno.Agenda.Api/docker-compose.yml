@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: Fauno.Agenda.Api/Dockerfile
+
+    container_name: fauno-agenda-api
+
+    networks:
+      - fauno-network
+
+    ports:
+      - "8081:8080"
+
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=fauno_agenda;Username=postgres;Password=postgres123
+      - RegisterApi__BaseUrl=http://register-api:8080/
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    restart: on-failure
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: fauno-agenda-postgres
+    networks:
+      - fauno-network
+
+    environment:
+      POSTGRES_DB: fauno_agenda
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fauno_agenda"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    restart: unless-stopped
+
+networks:
+  fauno-network:
+    external: true
+
+volumes:
+  postgres_data:
