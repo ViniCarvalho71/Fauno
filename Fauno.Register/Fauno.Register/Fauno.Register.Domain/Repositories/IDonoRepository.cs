@@ -1,0 +1,10 @@
+﻿using System.Threading.Tasks;
+using Fauno.Register.Domain.Entities;
+
+namespace Fauno.Register.Domain.Repositories;
+
+public interface IDonoRepository
+{
+    Task SalvarAsync(Dono dono);
+    Task<bool> ExisteCpfAsync(string cpf);
+}

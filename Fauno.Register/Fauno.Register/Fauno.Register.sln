@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fauno.Register.Api", "Fauno.Register.Api\Fauno.Register.Api.csproj", "{E69F01E2-E3DB-41CA-AA1F-C01F7E18EAB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fauno.Register.Domain", "Fauno.Register.Domain\Fauno.Register.Domain.csproj", "{5F9A9E86-1AC5-45C6-BE66-35FD4F4612F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fauno.Register.Infrastructure", "Fauno.Register.Infrastructure\Fauno.Register.Infrastructure.csproj", "{EB34666E-D2B4-41FE-9378-C0E93B89036A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fauno.Register.Application", "Fauno.Register.Application\Fauno.Register.Application.csproj", "{B746CFAA-43A2-4A47-BCE4-F0DEB1740973}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E69F01E2-E3DB-41CA-AA1F-C01F7E18EAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E69F01E2-E3DB-41CA-AA1F-C01F7E18EAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E69F01E2-E3DB-41CA-AA1F-C01F7E18EAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E69F01E2-E3DB-41CA-AA1F-C01F7E18EAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9A9E86-1AC5-45C6-BE66-35FD4F4612F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9A9E86-1AC5-45C6-BE66-35FD4F4612F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9A9E86-1AC5-45C6-BE66-35FD4F4612F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9A9E86-1AC5-45C6-BE66-35FD4F4612F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB34666E-D2B4-41FE-9378-C0E93B89036A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB34666E-D2B4-41FE-9378-C0E93B89036A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB34666E-D2B4-41FE-9378-C0E93B89036A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB34666E-D2B4-41FE-9378-C0E93B89036A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B746CFAA-43A2-4A47-BCE4-F0DEB1740973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B746CFAA-43A2-4A47-BCE4-F0DEB1740973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B746CFAA-43A2-4A47-BCE4-F0DEB1740973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B746CFAA-43A2-4A47-BCE4-F0DEB1740973}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
