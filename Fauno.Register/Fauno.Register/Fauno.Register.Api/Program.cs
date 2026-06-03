@@ -10,8 +10,11 @@ builder.Services.AddDbContext<Context>(options =>
     options.UseInMemoryDatabase("FaunoRegisterDb"));
 
 builder.Services.AddScoped<IDonoRepository, DonoRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IVeterinarioRepository, VeterinarioRepository>();
 builder.Services.AddScoped<CadastrarDonoUseCase>();
+builder.Services.AddScoped<CadastrarPetUseCase>();
+builder.Services.AddScoped<GerenciarPetUseCase>();
 builder.Services.AddScoped<CadastrarVeterinarioUseCase>();
 
 builder.Services.AddControllers();

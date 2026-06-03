@@ -9,6 +9,7 @@ namespace Fauno.Register.Infrastructure.Data.Context
     public class Context : DbContext
     {
         public DbSet<Dono> Donos { get; set; }
+        public DbSet<Pet> Pets { get; set; }
         public DbSet<Veterinario> Veterinarios { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
@@ -20,8 +21,7 @@ namespace Fauno.Register.Infrastructure.Data.Context
             modelBuilder.Entity<Dono>(entity =>
             {
                 entity.HasKey(x => x.Id);
-
-                // Molde exato do seu Fauno.Auth
+                
                 entity.OwnsOne(x => x.Cpf, cpf =>
                 {
                     cpf.Property(c => c.Numero)
@@ -31,6 +31,14 @@ namespace Fauno.Register.Infrastructure.Data.Context
 
                 entity.Property(x => x.Nome).IsRequired();
                 entity.Property(x => x.Email).IsRequired();
+            });
+            
+            modelBuilder.Entity<Pet>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+                entity.HasOne<Dono>()
+                    .WithMany()
+                    .HasForeignKey(p => p.DonoId);
             });
 
             modelBuilder.Entity<Veterinario>(entity =>
