@@ -1,12 +1,14 @@
 ﻿using Fauno.Agenda.Application.DTOs;
 using Fauno.Agenda.Application.UseCases;
 using Fauno.Agenda.Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fauno.Agenda.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class AvailabilityExceptionController : ControllerBase
     {
         private readonly CreateAvailabilityExceptionUseCase _createExceptionUseCase;

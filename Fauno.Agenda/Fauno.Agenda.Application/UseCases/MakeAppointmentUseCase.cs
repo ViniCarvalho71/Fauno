@@ -32,16 +32,16 @@ namespace Fauno.Agenda.Application.UseCases
 
         public async Task Run(AppointmentDto appointmentDto)
         {
-            bool ownerExisted = await _registerGateway.OwnerExists(appointmentDto.OwnerId);
-            bool petExisted = await _registerGateway.PetExists(appointmentDto.OwnerId, appointmentDto.PetId);
-            bool vetExisted = await _registerGateway.VeterinarianExists(appointmentDto.VeterinarianId);
+            //bool ownerExisted = await _registerGateway.OwnerExists(appointmentDto.OwnerId);
+            //bool petExisted = await _registerGateway.PetExists(appointmentDto.OwnerId, appointmentDto.PetId);
+            //bool vetExisted = await _registerGateway.VeterinarianExists(appointmentDto.VeterinarianId);
 
-            if (!ownerExisted)
-                throw new DomainException("Dono de pet inválido");
-            if (!petExisted)
-                throw new DomainException("Pet inválido");
-            if (!vetExisted)
-                throw new DomainException("Veterinário inválido");
+            //if (!ownerExisted)
+            //    throw new DomainException("Dono de pet inválido");
+            //if (!petExisted)
+            //    throw new DomainException("Pet inválido");
+            //if (!vetExisted)
+            //    throw new DomainException("Veterinário inválido");
 
             bool hasConflict = await _appointmentRepository.HasConflictAsync(
                 appointmentDto.VeterinarianId,

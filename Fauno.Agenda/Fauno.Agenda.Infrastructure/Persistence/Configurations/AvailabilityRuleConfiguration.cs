@@ -1,5 +1,8 @@
-﻿using Fauno.Agenda.Domain.Entities;
+﻿using System.Text.Json;
+using Fauno.Agenda.Domain.Entities;
+using Fauno.Agenda.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fauno.Agenda.Infrastructure.Persistence.Configurations
@@ -8,6 +11,8 @@ namespace Fauno.Agenda.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<AvailabilityRule> builder)
         {
+            var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.General);
+
             builder.ToTable("AvailabilityRules");
             builder.HasKey(r => r.Id);
 
@@ -21,11 +26,15 @@ namespace Fauno.Agenda.Infrastructure.Persistence.Configurations
                 pause.Property(p => p.End).HasColumnName("PauseEnd");
             });
 
-            // Recurrence — complexo com coleções, vai como JSON
-            builder.OwnsOne(r => r.Recurrence, recurrence =>
-            {
-                recurrence.ToJson();
-            });
+            builder.Property(r => r.Recurrence)
+                .HasColumnType("json")
+                .HasConversion(
+                    recurrence => JsonSerializer.Serialize(recurrence, jsonOptions),
+                    json => JsonSerializer.Deserialize<Recurrence>(json, jsonOptions)!)
+                .Metadata.SetValueComparer(new ValueComparer<Recurrence>(
+                    (left, right) => JsonSerializer.Serialize(left, jsonOptions) == JsonSerializer.Serialize(right, jsonOptions),
+                    value => JsonSerializer.Serialize(value, jsonOptions).GetHashCode(),
+                    value => JsonSerializer.Deserialize<Recurrence>(JsonSerializer.Serialize(value, jsonOptions), jsonOptions)!));
         }
     }
 }

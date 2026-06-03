@@ -1,20 +1,29 @@
-﻿using Fauno.Agenda.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+using Fauno.Agenda.Domain.Enums;
 using Fauno.Agenda.Domain.Exceptions;
 
 namespace Fauno.Agenda.Domain.ValueObjects
 {
     public class Recurrence
     {
+        [JsonInclude]
         public RecurrenceMode Mode { get; private set; }
 
         // Weekly
+        [JsonInclude]
         public IReadOnlyList<DayOfWeek>? DaysOfWeek { get; private set; }
+
+        [JsonInclude]
         public DateOnly? PeriodStart { get; private set; }
+
+        [JsonInclude]
         public DateOnly? PeriodEnd { get; private set; }
 
         // SpecificDates
+        [JsonInclude]
         public IReadOnlyList<DateOnly>? Dates { get; private set; }
 
+        [JsonConstructor]
         protected Recurrence() { }
 
         public static Recurrence Weekly(

@@ -4,8 +4,11 @@ using Fauno.Agenda.Domain.Interfaces.Repositories;
 using Fauno.Agenda.Infrastructure.Http;
 using Fauno.Agenda.Infrastructure.Persistence;
 using Fauno.Agenda.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +17,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var jwtSecret = jwtSettings["Secret"];
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSecret!))
+        };
+
+        
+    });
+
+builder.Services.AddAuthorization();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 34));
+
 builder.Services.AddDbContext<AgendaDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(connectionString, serverVersion));
 
 // Repositories
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
@@ -43,6 +72,8 @@ builder.Services.AddHttpClient<IRegisterGateway, RegisterApiClient>(
 
 builder.Services.AddOpenApi();
 
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() ||
@@ -54,6 +85,8 @@ if (app.Environment.IsDevelopment() ||
 
 app.UseHttpsRedirection();
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
