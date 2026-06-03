@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Fauno.Register.Application.UseCases;
+using Fauno.Register.Application.DTOs.Requests;
 
 namespace Fauno.Register.Api.Controllers;
 

@@ -2,15 +2,9 @@
 using System.Threading.Tasks;
 using Fauno.Register.Domain.Entities;
 using Fauno.Register.Domain.Repositories;
+using Fauno.Register.Application.DTOs.Requests;
 
 namespace Fauno.Register.Application.UseCases;
-
-public class CadastrarVeterinarioRequest
-{
-    public string Nome { get; set; } = string.Empty;
-    public string Cpf { get; set; } = string.Empty;
-    public string Crmv { get; set; } = string.Empty;
-}
 
 public class CadastrarVeterinarioUseCase
 {
