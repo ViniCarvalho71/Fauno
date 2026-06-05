@@ -14,7 +14,9 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IVeterinarioRepository, VeterinarioRepository>();
 builder.Services.AddScoped<CadastrarDonoUseCase>();
 builder.Services.AddScoped<CadastrarPetUseCase>();
-builder.Services.AddScoped<GerenciarPetUseCase>();
+builder.Services.AddScoped<ListarPetsDoDonoUseCase>();
+builder.Services.AddScoped<AtualizarPetUseCase>();
+builder.Services.AddScoped<BuscarHistoricoPetUseCase>();
 builder.Services.AddScoped<CadastrarVeterinarioUseCase>();
 
 builder.Services.AddControllers();
