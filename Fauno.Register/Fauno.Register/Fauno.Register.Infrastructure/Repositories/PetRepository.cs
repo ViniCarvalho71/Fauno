@@ -39,5 +39,9 @@ public class PetRepository : IPetRepository
     {
         return await _context.Pets.Where(p => p.DonoId == donoId).ToListAsync();
     }
-
+    
+    public async Task<bool> ExistePorIdAsync(Guid id)
+    {
+        return await _context.Pets.AnyAsync(p => p.Id == id);
+    }
 }

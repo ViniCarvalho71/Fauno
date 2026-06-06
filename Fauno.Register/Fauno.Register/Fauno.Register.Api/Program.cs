@@ -17,6 +17,7 @@ builder.Services.AddScoped<ObterDonoIdPorUserIdUseCase>();
 builder.Services.AddScoped<VerificarDonoExisteUseCase>();
 builder.Services.AddScoped<ObterVeterinarioIdPorUserIdUseCase>();
 builder.Services.AddScoped<VerificarVeterinarioExisteUseCase>();
+builder.Services.AddScoped<VerificarPetExisteUseCase>();
 builder.Services.AddScoped<CadastrarPetUseCase>();
 builder.Services.AddScoped<ListarPetsDoDonoUseCase>();
 builder.Services.AddScoped<AtualizarPetUseCase>();

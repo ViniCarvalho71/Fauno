@@ -11,4 +11,5 @@ public interface IPetRepository
     Task AtualizarAsync(Pet pet);
     Task<Pet?> BuscarPorIdAsync(Guid id);
     Task<IEnumerable<Pet>> BuscarPorDonoIdAsync(Guid donoId);
+    Task <bool> ExistePorIdAsync(Guid id);
 }

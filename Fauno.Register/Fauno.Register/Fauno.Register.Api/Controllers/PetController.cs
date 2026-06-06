@@ -14,17 +14,20 @@ public class PetController : ControllerBase
     private readonly ListarPetsDoDonoUseCase _listarPetsDoDonoUseCase;
     private readonly AtualizarPetUseCase _atualizarPetUseCase;
     private readonly BuscarHistoricoPetUseCase _buscarHistoricoPetUseCase;
+    private readonly VerificarPetExisteUseCase _verificarPetExisteUseCase;
 
     public PetController(
         CadastrarPetUseCase cadastrarPetUseCase, 
         ListarPetsDoDonoUseCase listarPetsDoDonoUseCase,
         AtualizarPetUseCase atualizarPetUseCase,
-        BuscarHistoricoPetUseCase buscarHistoricoPetUseCase)
+        BuscarHistoricoPetUseCase buscarHistoricoPetUseCase,
+        VerificarPetExisteUseCase verificarPetExisteUseCase)
     {
         _cadastrarPetUseCase = cadastrarPetUseCase;
         _listarPetsDoDonoUseCase = listarPetsDoDonoUseCase;
         _atualizarPetUseCase = atualizarPetUseCase;
         _buscarHistoricoPetUseCase = buscarHistoricoPetUseCase;
+        _verificarPetExisteUseCase = verificarPetExisteUseCase;
     }
 
     [HttpPost]
@@ -65,5 +68,12 @@ public class PetController : ControllerBase
             return Ok(historico);
         }
         catch (Exception ex) { return BadRequest(new { erro = ex.Message }); }
+    }
+    
+    [HttpGet("{id}/existe")]
+    public async Task<IActionResult> PetExists(Guid id)
+    {
+        var existe = await _verificarPetExisteUseCase.Run(id);
+        return Ok(existe); 
     }
 }
