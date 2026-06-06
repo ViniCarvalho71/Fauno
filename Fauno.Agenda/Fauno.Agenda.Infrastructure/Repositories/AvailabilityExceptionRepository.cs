@@ -27,7 +27,6 @@ namespace Fauno.Agenda.Infrastructure.Repositories
             await _context.AvailabilityExceptions
                 .Where(e => e.VeterinarianId == veterinarianId)
                 .ToListAsync();
-        // AvailabilityExceptionRepository
         public async Task<bool> ExistsForDateAsync(Guid veterinarianId, DateOnly date) =>
             await _context.AvailabilityExceptions
                 .AnyAsync(e => e.VeterinarianId == veterinarianId && e.Date == date);

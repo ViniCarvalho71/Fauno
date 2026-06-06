@@ -3,7 +3,7 @@
 public class AppointmentDto
 {
     public Guid VeterinarianId { get; set; }
-    public Guid OwnerId { get; set; }
+
     public Guid PetId { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }

@@ -7,6 +7,8 @@ using Fauno.Agenda.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+
 using Scalar.AspNetCore;
 using System.Text;
 
@@ -35,7 +37,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(jwtSecret!))
         };
 
-        
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine("JWT ERROR:");
+                Console.WriteLine(context.Exception.ToString());
+                return Task.CompletedTask;
+            },
+
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("TOKEN VALIDADO");
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
@@ -69,8 +85,29 @@ builder.Services.AddHttpClient<IRegisterGateway, RegisterApiClient>(
     {
         client.BaseAddress = new Uri("http://localhost:8000/");
     });
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Components ??= new OpenApiComponents();
 
-builder.Services.AddOpenApi();
+        document.Components.SecuritySchemes ??=
+            new Dictionary<string, IOpenApiSecurityScheme>();
+
+        document.Components.SecuritySchemes["Bearer"] =
+            new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Description = "Informe apenas o JWT"
+            };
+
+        return Task.CompletedTask;
+    });
+});
 
 
 
@@ -80,7 +117,9 @@ if (app.Environment.IsDevelopment() ||
     app.Environment.IsEnvironment("Docker"))
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options => options
+    .AddPreferredSecuritySchemes("Bearer")
+    .EnablePersistentAuthentication());
 }
 
 app.UseHttpsRedirection();

@@ -3,6 +3,7 @@ using Fauno.Agenda.Application.UseCases;
 using Fauno.Agenda.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Fauno.Agenda.Api.Controllers
 {
@@ -27,7 +28,8 @@ namespace Fauno.Agenda.Api.Controllers
         {
             try
             {
-                await _createAvailabilityRuleUseCase.Run(dto);
+                var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+                await _createAvailabilityRuleUseCase.Run(dto, userId);
                 return Created();
             }
             catch (DomainException ex)
@@ -40,7 +42,9 @@ namespace Fauno.Agenda.Api.Controllers
         {
             try
             {
-                await _removeUseCase.Run(id);
+                var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+                await _removeUseCase.Run(id, userId);
                 return NoContent();
             }
             catch (DomainException ex) { return BadRequest(ex.Message); }

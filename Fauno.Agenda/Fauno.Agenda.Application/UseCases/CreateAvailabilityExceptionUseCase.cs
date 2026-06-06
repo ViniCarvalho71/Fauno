@@ -22,16 +22,20 @@ namespace Fauno.Agenda.Application.UseCases
             _availabilityExceptionRepository = availabilityExceptionRepository;
         }
 
-        public async Task Run(CreateAvailabilityExceptionDto dto)
+        public async Task Run(CreateAvailabilityExceptionDto dto, Guid userId)
         {
-            bool vetExists = await _registerGateway.VeterinarianExists(dto.VeterinarianId);
+            //Guid VetenerianId = await _registerGateway.GetVeterinarianIdByUserId(userId);
+            //if (VetenerianId == Guid.Empty)
+            //    throw new DomainException("Usuário não é um veterinário.");
+            Guid VeterinarianId = userId; // Troca isso oboviamente
+            bool vetExists = await _registerGateway.VeterinarianExists(VeterinarianId);
             if (!vetExists)
                 throw new DomainException("Veterinário inválido.");
 
             if (dto.Date < DateOnly.FromDateTime(DateTime.UtcNow))
                 throw new DomainException("Não é possível bloquear uma data no passado.");
 
-            var exception = new AvailabilityException(dto.VeterinarianId, dto.Date, dto.Reason);
+            var exception = new AvailabilityException(VeterinarianId, dto.Date, dto.Reason);
             await _availabilityExceptionRepository.AddAsync(exception);
         }
     }

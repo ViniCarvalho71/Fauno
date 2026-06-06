@@ -35,10 +35,8 @@ namespace Fauno.Agenda.Domain.Entities
             Pause = pause;
         }
 
-        // Gera todos os slots de um dia específico
         public IEnumerable<(TimeOnly Start, TimeOnly End)> GenerateSlotsFor(DateOnly date)
         {
-            // Verifica se essa regra cobre essa data
             if (!Recurrence.ResolveDates().Contains(date))
                 yield break;
 
@@ -49,7 +47,6 @@ namespace Fauno.Agenda.Domain.Entities
             {
                 var next = current.Add(slotSpan);
 
-                // Pula slots que colidem com a pausa
                 bool collidesWithPause = Pause is not null &&
                     current < Pause.End && next > Pause.Start;
 

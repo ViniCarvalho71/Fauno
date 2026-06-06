@@ -3,6 +3,7 @@ using Fauno.Agenda.Application.UseCases;
 using Fauno.Agenda.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Fauno.Agenda.Api.Controllers
 {
@@ -21,9 +22,10 @@ namespace Fauno.Agenda.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateAvailabilityExceptionDto dto)
         {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             try
             {
-                await _createExceptionUseCase.Run(dto);
+                await _createExceptionUseCase.Run(dto, userId);
                 return Created();
             }
             catch (DomainException ex) { return BadRequest(ex.Message); }

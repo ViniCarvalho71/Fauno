@@ -23,7 +23,8 @@ public class Appointment : EntityBase
         Guid ownerId,
         Guid petId,
         DateTime start,
-        DateTime end)
+        DateTime end,
+        AppointmentType appointmentType)
     {
         Title = title ?? "Consulta";
         Description = description ?? "Sem descrição";
@@ -33,6 +34,7 @@ public class Appointment : EntityBase
         PetId = petId;
         Start = start;
         End = end;
+        AppointmentType = appointmentType;
     }
 
     public void Cancel()

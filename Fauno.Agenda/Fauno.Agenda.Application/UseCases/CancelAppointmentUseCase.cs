@@ -15,12 +15,16 @@ namespace Fauno.Agenda.Application.UseCases
             _appointmentRepository = appointmentRepository;
         }
 
-        public async Task Run(Guid appointmentId)
+        public async Task Run(Guid appointmentId, Guid userId)
         {
-            var appointment = await _appointmentRepository.GetByIdAsync(appointmentId);
-
+            //Guid VeterinarianId = await _appointmentRepository.GetVeterinarianIdByUserIdAsync(userId);
+            Guid VeterinarianId = userId;
+            if(VeterinarianId == Guid.Empty)
+                throw new DomainException("Apenas o veterinário pode cancelar.");
+            var appointment = await _appointmentRepository.GetByIdAndVeterinarianIdAsync(appointmentId, VeterinarianId);
             if (appointment is null)
                 throw new DomainException("Consulta não encontrada.");
+
 
             appointment.Cancel();
             await _appointmentRepository.UpdateAsync(appointment);

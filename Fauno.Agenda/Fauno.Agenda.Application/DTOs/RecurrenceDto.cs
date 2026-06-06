@@ -9,12 +9,10 @@ namespace Fauno.Agenda.Application.DTOs
     {
         public RecurrenceMode Mode { get; set; }
 
-        // Weekly
         public List<DayOfWeek>? DaysOfWeek { get; set; }
         public DateOnly? PeriodStart { get; set; }
         public DateOnly? PeriodEnd { get; set; }
 
-        // SpecificDates
         public List<DateOnly>? Dates { get; set; }
     }
 }

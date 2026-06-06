@@ -14,34 +14,34 @@ services:
 
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=fauno_agenda;Username=postgres;Password=postgres123
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=fauno_agenda;User=root;Password=mysql123;
       - RegisterApi__BaseUrl=http://register-api:8080/
 
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
 
     restart: on-failure
 
-  postgres:
-    image: postgres:16-alpine
-    container_name: fauno-agenda-postgres
+  mysql:
+    image: mysql:8.4
+    container_name: fauno-agenda-mysql
+
     networks:
       - fauno-network
 
     environment:
-      POSTGRES_DB: fauno_agenda
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
+      MYSQL_DATABASE: fauno_agenda
+      MYSQL_ROOT_PASSWORD: mysql123
 
     ports:
-      - "5433:5432"
+      - "3306:3306"
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d fauno_agenda"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pmysql123"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -53,4 +53,4 @@ networks:
     external: true
 
 volumes:
-  postgres_data:
+  mysql_data:

@@ -21,32 +21,36 @@ namespace Fauno.Agenda.Application.UseCases
             _appointmentRepository = appointmentRepository;
         }
 
-        public async Task<IEnumerable<AppointmentResponseDto>> Run(GetAppointmentsByVeterinarianDto dto)
+        public async Task<IEnumerable<AppointmentResponseDto>> Run(DateOnly? date, Guid userId)
         {
-            bool vetExists = await _registerGateway.VeterinarianExists(dto.VeterinarianId);
+
+            //Guid VetenerianId = await _registerGateway.GetVeterinarianIdByUserId(userId);
+            //if (VetenerianId == Guid.Empty)
+            //    throw new DomainException("Usuário não é um veterinário.");
+            Guid VeterinarianId = userId; // Tira isso pelor né
+            bool vetExists = await _registerGateway.VeterinarianExists(VeterinarianId);
             if (!vetExists)
                 throw new DomainException("Veterinário inválido.");
 
-            var appointments = dto.Date.HasValue
-                ? await _appointmentRepository.GetByVeterinarianAndDateAsync(dto.VeterinarianId, dto.Date.Value)
-                : await _appointmentRepository.GetByVeterinarianIdAsync(dto.VeterinarianId);
-
-            return appointments.Select(ToDto);
+            var appointments = date.HasValue
+                ? await _appointmentRepository.GetByVeterinarianAndDateAsync(VeterinarianId, date.Value)
+                : await _appointmentRepository.GetByVeterinarianIdAsync(VeterinarianId);
+            return appointments.Select(a => new AppointmentResponseDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                Status = a.Status.ToString(),
+                AppointmentType = a.AppointmentType.ToString(),
+                VeterinarianId = a.VeterinarianId,
+                OwnerId = a.OwnerId,
+                PetId = a.PetId,
+                Start = a.Start,
+                End = a.End,
+                CreatedAt = a.CreatedAt
+            });
         }
 
-        private static AppointmentResponseDto ToDto(Appointment a) => new()
-        {
-            Id = a.Id,
-            Title = a.Title,
-            Description = a.Description,
-            Status = a.Status.ToString(),
-            AppointmentType = a.AppointmentType.ToString(),
-            VeterinarianId = a.VeterinarianId,
-            OwnerId = a.OwnerId,
-            PetId = a.PetId,
-            Start = a.Start,
-            End = a.End,
-            CreatedAt = a.CreatedAt
-        };
+        
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Fauno.Agenda.Application.DTOs;
 using Fauno.Agenda.Application.Interfaces.Http;
+using Fauno.Agenda.Domain.Entities;
+using Fauno.Agenda.Domain.Enums;
 using Fauno.Agenda.Domain.Exceptions;
 using Fauno.Agenda.Domain.Interfaces.Repositories;
 
@@ -30,18 +32,31 @@ namespace Fauno.Agenda.Application.UseCases
             if (!vetExists)
                 throw new DomainException("Veterinário inválido.");
 
-            // Dia bloqueado por exceção — retorna vazio direto
             bool isDayBlocked = await _availabilityExceptionRepository
                 .ExistsForDateAsync(dto.VeterinarianId, dto.Date);
 
             if (isDayBlocked)
                 return [];
 
-            // Gera todos os slots possíveis para o dia pelas regras ativas
             var rules = await _availabilityRuleRepository
                 .GetByVeterinarianIdAsync(dto.VeterinarianId);
 
-            var allSlots = rules
+            var specificRules = rules.Where(r => r.Recurrence.Mode == RecurrenceMode.SpecificDates && r.Recurrence.ResolveDates().Contains(dto.Date)).ToList();
+
+            IEnumerable<AvailabilityRule> rulesToUse;
+
+            if (specificRules.Any())
+            {
+                
+                rulesToUse = specificRules;
+            }
+            else
+            {
+                rulesToUse = rules.Where(r =>
+                    r.Recurrence.Mode == RecurrenceMode.Weekly);
+            }
+
+            var allSlots = rulesToUse
                 .SelectMany(rule => rule.GenerateSlotsFor(dto.Date))
                 .Distinct()
                 .OrderBy(s => s.Start)
@@ -50,11 +65,9 @@ namespace Fauno.Agenda.Application.UseCases
             if (!allSlots.Any())
                 return [];
 
-            // Busca appointments já existentes no dia
             var existingAppointments = await _appointmentRepository
                 .GetByVeterinarianAndDateAsync(dto.VeterinarianId, dto.Date);
 
-            // Remove slots que colidem com appointments existentes
             var availableSlots = allSlots
                 .Where(slot => !existingAppointments.Any(a =>
                     TimeOnly.FromDateTime(a.Start) < slot.End &&

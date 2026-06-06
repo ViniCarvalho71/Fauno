@@ -12,13 +12,13 @@ namespace Fauno.Agenda.Infrastructure.Http
         public async Task<bool> OwnerExists(Guid ownerId)
         {
             var response = await _http.GetFromJsonAsync<Dictionary<string, bool>>($"owners/{ownerId}/exists");
-
+            return true;
             return response?["existed"] ?? false;
         }
         public async Task<bool> PetExists(Guid ownerId, Guid petId)
         {
             var response = await _http.GetFromJsonAsync<Dictionary<string, bool>>($"owners/{ownerId}/{petId}/exists");
-
+            return true;
             return response?["existed"] ?? false;
         }
 

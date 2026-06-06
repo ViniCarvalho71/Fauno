@@ -24,9 +24,13 @@ namespace Fauno.Agenda.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Appointment?> GetByIdAsync(Guid id) =>
-            await _context.Appointments
-                .FirstOrDefaultAsync(a => a.Id == id && a.RemovedAt == null);
+
+
+        public async Task<Appointment?> GetByIdAndVeterinarianIdAsync(Guid appointmentId, Guid veterinarianId)
+        {
+            return await _context.Appointments
+                .FirstOrDefaultAsync(a => a.Id == appointmentId && a.VeterinarianId == veterinarianId);
+        }
 
         public async Task<IEnumerable<Appointment>> GetByVeterinarianIdAsync(Guid veterinarianId) =>
             await _context.Appointments
@@ -49,6 +53,20 @@ namespace Fauno.Agenda.Infrastructure.Repositories
             return await _context.Appointments
                 .Where(a =>
                     a.VeterinarianId == veterinarianId &&
+                    a.RemovedAt == null &&
+                    a.Status != AppointmentStatus.Cancelled &&
+                    a.Start >= start && a.Start < end)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetByOwnerAndDateAsync(Guid ownerId, DateOnly date)
+        {
+            var start = date.ToDateTime(TimeOnly.MinValue);
+            var end = date.ToDateTime(TimeOnly.MaxValue);
+
+            return await _context.Appointments
+                .Where(a =>
+                    a.OwnerId == ownerId &&
                     a.RemovedAt == null &&
                     a.Status != AppointmentStatus.Cancelled &&
                     a.Start >= start && a.Start < end)

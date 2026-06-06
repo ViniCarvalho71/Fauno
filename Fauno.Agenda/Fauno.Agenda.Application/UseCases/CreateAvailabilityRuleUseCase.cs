@@ -21,9 +21,14 @@ namespace Fauno.Agenda.Application.UseCases
             _availabilityRuleRepository = availabilityRuleRepository;
         }
 
-        public async Task Run(CreateAvailabilityRuleDto dto)
+        public async Task Run(CreateAvailabilityRuleDto dto, Guid userId)
         {
-            bool vetExists = await _registerGateway.VeterinarianExists(dto.VeterinarianId);
+            //Guid VetenerianId = await _registerGateway.GetVeterinarianIdByUserId(userId);
+            //if (VetenerianId == Guid.Empty)
+            //    throw new DomainException("Usuário não é um veterinário.");
+            Guid VeterinarianId = userId; // Troca isso oboviamente
+
+            bool vetExists = await _registerGateway.VeterinarianExists(VeterinarianId);
             if (!vetExists)
                 throw new DomainException("Veterinário inválido.");
 
@@ -31,7 +36,8 @@ namespace Fauno.Agenda.Application.UseCases
                 ? Recurrence.Weekly(
                     dto.Recurrence.DaysOfWeek!,
                     dto.Recurrence.PeriodStart!.Value,
-                    dto.Recurrence.PeriodEnd!.Value)
+                    dto.Recurrence.PeriodEnd!.Value
+                    )
                 : Recurrence.SpecificDates(dto.Recurrence.Dates!);
 
             PauseWindow? pause = dto.Pause is not null
@@ -39,7 +45,7 @@ namespace Fauno.Agenda.Application.UseCases
                 : null;
 
             var rule = new AvailabilityRule(
-                dto.VeterinarianId,
+                VeterinarianId,
                 dto.SlotStart,
                 dto.SlotEnd,
                 dto.SlotDurationMinutes,
