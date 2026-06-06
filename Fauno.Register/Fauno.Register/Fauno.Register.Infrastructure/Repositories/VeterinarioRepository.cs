@@ -25,4 +25,15 @@ public class VeterinarioRepository : IVeterinarioRepository
     {
         return await _context.Veterinarios.AnyAsync(v => v.Cpf.Numero == cpf);
     }
+    
+    public async Task<Guid?> ObterIdPorUserIdAsync(Guid userId)
+    {
+        var dono = await _context.Veterinarios.AsNoTracking().FirstOrDefaultAsync(d => d.UserId == userId);
+        return dono?.Id;
+    }
+
+    public async Task<bool> ExistePorIdAsync(Guid userId)
+    {
+        return await _context.Veterinarios.AnyAsync(d => d.UserId == userId);
+    }
 }

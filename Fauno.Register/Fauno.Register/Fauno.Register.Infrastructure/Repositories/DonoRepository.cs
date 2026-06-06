@@ -25,4 +25,15 @@ public class DonoRepository : IDonoRepository
     {
         return await _context.Donos.AnyAsync(d => d.Cpf.Numero == cpf);
     }
+    
+    public async Task<Guid?> ObterIdPorUserIdAsync(Guid userId)
+    {
+        var dono = await _context.Donos.AsNoTracking().FirstOrDefaultAsync(d => d.UserId == userId);
+        return dono?.Id;
+    }
+
+    public async Task<bool> ExistePorIdAsync(Guid userId)
+    {
+        return await _context.Donos.AnyAsync(d => d.UserId == userId);
+    }
 }

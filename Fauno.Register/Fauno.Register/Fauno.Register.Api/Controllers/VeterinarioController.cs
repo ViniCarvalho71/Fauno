@@ -11,6 +11,8 @@ namespace Fauno.Register.Api.Controllers;
 public class VeterinarioController : ControllerBase
 {
     private readonly CadastrarVeterinarioUseCase _useCase;
+    private readonly ObterVeterinarioIdPorUserIdUseCase _obterVetIdUseCase;
+    private readonly VerificarVeterinarioExisteUseCase _verificarVetExisteUseCase;
 
     public VeterinarioController(CadastrarVeterinarioUseCase useCase)
     {
@@ -29,5 +31,21 @@ public class VeterinarioController : ControllerBase
         {
             return BadRequest(new { erro = ex.Message });
         }
+    }
+    
+    [HttpGet("usuario/{userId}/id")]
+    public async Task<IActionResult> GetVeterinarianIdByUserId(Guid userId)
+    {
+        var id = await _obterVetIdUseCase.Run(userId);
+        if (id == null) return NotFound(new { mensagem = "Veterinário não encontrado para este usuário." });
+    
+        return Ok(new { veterinarianId = id });
+    }
+
+    [HttpGet("usuario/{userId}/existe")]
+    public async Task<IActionResult> VeterinarianExists(Guid id)
+    {
+        var existe = await _verificarVetExisteUseCase.Run(id);
+        return Ok(existe);
     }
 }

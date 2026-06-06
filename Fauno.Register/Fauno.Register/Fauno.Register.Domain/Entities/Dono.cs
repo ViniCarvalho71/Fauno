@@ -3,20 +3,20 @@ using Fauno.Register.Domain.ValueObjects;
 
 namespace Fauno.Register.Domain.Entities;
 
-public class Dono
+public class Dono : EntityBase
 {
-    public Guid Id { get; private set; }
+    public Guid UserId { get; private set; }
     public string Nome { get; private set; }
     public Cpf Cpf { get; private set; }
     public string Email { get; private set; }
 
-    public Dono(string nome, string cpf, string email)
+    public Dono(Guid userId, string nome, string cpf, string email) : base()
     {
-        Id = Guid.NewGuid();
+        UserId = userId;
         Nome = nome;
         Cpf = new Cpf(cpf);
         Email = email;
     }
     
-    protected Dono() { }
+    protected Dono() : base() { }
 }

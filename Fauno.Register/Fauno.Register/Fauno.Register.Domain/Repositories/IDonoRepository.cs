@@ -7,4 +7,6 @@ public interface IDonoRepository
 {
     Task SalvarAsync(Dono dono);
     Task<bool> ExisteCpfAsync(string cpf);
+    Task<Guid?> ObterIdPorUserIdAsync(Guid userId);
+    Task<bool> ExistePorIdAsync(Guid userId);
 }

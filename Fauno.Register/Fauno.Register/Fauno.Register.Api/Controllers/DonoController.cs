@@ -11,6 +11,8 @@ namespace Fauno.Register.Api.Controllers;
 public class DonoController : ControllerBase
 {
     private readonly CadastrarDonoUseCase _useCase;
+    private readonly ObterDonoIdPorUserIdUseCase _obterDonoIdUseCase;
+    private readonly VerificarDonoExisteUseCase _verificarDonoExisteUseCase;
 
     public DonoController(CadastrarDonoUseCase useCase)
     {
@@ -29,5 +31,21 @@ public class DonoController : ControllerBase
         {
             return BadRequest(new { erro = ex.Message });
         }
+    }
+    
+    [HttpGet("usuario/{userId}/id")]
+    public async Task<IActionResult> GetOwnerIdByUserId(Guid userId)
+    {
+        var id = await _obterDonoIdUseCase.Run(userId);
+        if (id == null) return NotFound(new { mensagem = "Dono não encontrado para este usuário." });
+    
+        return Ok(new { ownerId = id });
+    }
+
+    [HttpGet("usuario/{userId}/existe")]
+    public async Task<IActionResult> OwnerExists(Guid id)
+    {
+        var existe = await _verificarDonoExisteUseCase.Run(id);
+        return Ok(existe);
     }
 }

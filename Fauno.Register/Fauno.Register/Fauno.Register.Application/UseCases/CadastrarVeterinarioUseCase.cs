@@ -22,7 +22,7 @@ public class CadastrarVeterinarioUseCase
         if (await _vetRepository.ExisteCpfAsync(cpfLimpo))
             throw new Exception("Já existe um veterinário cadastrado com este CPF.");
 
-        var vet = new Veterinario(request.Nome, cpfLimpo, request.Crmv);
+        var vet = new Veterinario(request.UserId, request.Nome, cpfLimpo, request.Crmv);
         await _vetRepository.SalvarAsync(vet);
 
         return vet;

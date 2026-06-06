@@ -22,7 +22,7 @@ public class CadastrarDonoUseCase
         if (await _donoRepository.ExisteCpfAsync(cpfLimpo))
             throw new Exception("Já existe um dono cadastrado com este CPF.");
 
-        var dono = new Dono(request.Nome, cpfLimpo, request.Email);
+        var dono = new Dono(request.UserId, request.Nome, cpfLimpo, request.Email);
         await _donoRepository.SalvarAsync(dono);
 
         return dono;
