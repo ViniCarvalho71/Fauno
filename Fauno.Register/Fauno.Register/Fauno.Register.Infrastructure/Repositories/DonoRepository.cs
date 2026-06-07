@@ -32,8 +32,8 @@ public class DonoRepository : IDonoRepository
         return dono?.Id;
     }
 
-    public async Task<bool> ExistePorIdAsync(Guid userId)
+    public async Task<bool> ExistePorIdAsync(Guid id)
     {
-        return await _context.Donos.AnyAsync(d => d.UserId == userId);
+        return await _context.Donos.AnyAsync(d => d.Id== id);
     }
 }

@@ -30,7 +30,7 @@ namespace Fauno.Agenda.Application.UseCases
         {
             bool vetExists = await _registerGateway.VeterinarianExists(dto.VeterinarianId);
             if (!vetExists)
-                throw new DomainException("Veterinário inválido.");
+                throw new DomainException("Usuário inválido.");
 
             bool isDayBlocked = await _availabilityExceptionRepository
                 .ExistsForDateAsync(dto.VeterinarianId, dto.Date);

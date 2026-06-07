@@ -1,18 +1,22 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Fauno.Register.Application.DTOs.Requests;
+using Fauno.Register.Application.Interfaces.Http;
 using Fauno.Register.Domain.Entities;
 using Fauno.Register.Domain.Repositories;
-using Fauno.Register.Application.DTOs.Requests;
+using System;
+using System.Threading.Tasks;
 
 namespace Fauno.Register.Application.UseCases;
 
 public class CadastrarVeterinarioUseCase
 {
     private readonly IVeterinarioRepository _vetRepository;
+    private readonly IAuthGateway _authGateway;
 
-    public CadastrarVeterinarioUseCase(IVeterinarioRepository vetRepository)
+    public CadastrarVeterinarioUseCase(IVeterinarioRepository vetRepository, IAuthGateway authGateway)
     {
         _vetRepository = vetRepository;
+        _authGateway = authGateway;
+
     }
 
     public async Task<Veterinario> Run(CadastrarVeterinarioRequest request)
@@ -21,8 +25,8 @@ public class CadastrarVeterinarioUseCase
 
         if (await _vetRepository.ExisteCpfAsync(cpfLimpo))
             throw new Exception("Já existe um veterinário cadastrado com este CPF.");
-
-        var vet = new Veterinario(request.UserId, request.Nome, cpfLimpo, request.Crmv);
+        var userId = await _authGateway.CreateUser(request.Email, request.Password);
+        var vet = new Veterinario(userId, request.Nome, cpfLimpo, request.Crmv);
         await _vetRepository.SalvarAsync(vet);
 
         return vet;

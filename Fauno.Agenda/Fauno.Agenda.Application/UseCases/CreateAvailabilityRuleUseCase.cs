@@ -23,14 +23,11 @@ namespace Fauno.Agenda.Application.UseCases
 
         public async Task Run(CreateAvailabilityRuleDto dto, Guid userId)
         {
-            //Guid VetenerianId = await _registerGateway.GetVeterinarianIdByUserId(userId);
-            //if (VetenerianId == Guid.Empty)
-            //    throw new DomainException("Usuário não é um veterinário.");
-            Guid VeterinarianId = userId; // Troca isso oboviamente
+            Guid VeterinarianId = await _registerGateway.GetVeterinarianIdByUserIdAsync(userId);
+            if (VeterinarianId  == Guid.Empty)
+                throw new DomainException("Usuário não é um veterinário.");
 
-            bool vetExists = await _registerGateway.VeterinarianExists(VeterinarianId);
-            if (!vetExists)
-                throw new DomainException("Veterinário inválido.");
+           
 
             Recurrence recurrence = dto.Recurrence.Mode == RecurrenceMode.Weekly
                 ? Recurrence.Weekly(

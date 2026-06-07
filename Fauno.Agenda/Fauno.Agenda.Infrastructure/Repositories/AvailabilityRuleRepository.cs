@@ -41,5 +41,9 @@ namespace Fauno.Agenda.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> RuleOwnerAsync(Guid ruleId, Guid veterinarianId)=>
+            await _context.AvailabilityRules.
+                AnyAsync(r => r.Id == ruleId && r.VeterinarianId == veterinarianId);
+        
     }
 }

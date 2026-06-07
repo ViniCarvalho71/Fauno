@@ -40,8 +40,8 @@ public class PetRepository : IPetRepository
         return await _context.Pets.Where(p => p.DonoId == donoId).ToListAsync();
     }
     
-    public async Task<bool> ExistePorIdAsync(Guid id)
+    public async Task<bool> ExistePorIdAsync(Guid id, Guid ownerId)
     {
-        return await _context.Pets.AnyAsync(p => p.Id == id);
+        return await _context.Pets.AnyAsync(p => p.Id == id && p.DonoId == ownerId);
     }
 }

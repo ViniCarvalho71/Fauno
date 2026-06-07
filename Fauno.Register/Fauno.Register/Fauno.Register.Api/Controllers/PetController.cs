@@ -1,8 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Fauno.Register.Application.DTOs;
+﻿using Fauno.Register.Application.DTOs;
 using Fauno.Register.Application.UseCases;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace Fauno.Register.Api.Controllers;
 
@@ -29,7 +30,7 @@ public class PetController : ControllerBase
         _buscarHistoricoPetUseCase = buscarHistoricoPetUseCase;
         _verificarPetExisteUseCase = verificarPetExisteUseCase;
     }
-
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Cadastrar([FromBody] CadastrarPetRequest request)
     {
@@ -40,14 +41,14 @@ public class PetController : ControllerBase
         }
         catch (Exception ex) { return BadRequest(new { erro = ex.Message }); }
     }
-
+    [Authorize]
     [HttpGet("dono/{donoId}")]
     public async Task<IActionResult> ListarPorDono(Guid donoId)
     {
         var pets = await _listarPetsDoDonoUseCase.Run(donoId);
         return Ok(pets);
     }
-
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Atualizar(Guid id, [FromBody] AtualizarPetRequest request)
     {
@@ -58,7 +59,7 @@ public class PetController : ControllerBase
         }
         catch (Exception ex) { return BadRequest(new { erro = ex.Message }); }
     }
-
+    [Authorize]
     [HttpGet("{id}/historico")]
     public async Task<IActionResult> VerHistorico(Guid id)
     {
@@ -69,11 +70,12 @@ public class PetController : ControllerBase
         }
         catch (Exception ex) { return BadRequest(new { erro = ex.Message }); }
     }
-    
-    [HttpGet("{id}/existe")]
-    public async Task<IActionResult> PetExists(Guid id)
+    [Authorize]
+    [HttpGet("dono/{ownerId}/{id}/existe")]
+    public async Task<IActionResult> PetExists(Guid id, Guid ownerId)
     {
-        var existe = await _verificarPetExisteUseCase.Run(id);
+
+        var existe = await _verificarPetExisteUseCase.Run(id, ownerId);
         return Ok(existe); 
     }
 }

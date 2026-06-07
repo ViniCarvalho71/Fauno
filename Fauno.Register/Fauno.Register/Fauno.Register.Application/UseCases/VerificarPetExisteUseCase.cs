@@ -9,5 +9,5 @@ public class VerificarPetExisteUseCase
     private readonly IPetRepository _repo;
     public VerificarPetExisteUseCase(IPetRepository repo) => _repo = repo;
 
-    public async Task<bool> Run(Guid petId) => await _repo.ExistePorIdAsync(petId);
+    public async Task<bool> Run(Guid petId, Guid ownerId) => await _repo.ExistePorIdAsync(petId, ownerId);
 }

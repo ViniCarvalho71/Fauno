@@ -32,8 +32,8 @@ public class VeterinarioRepository : IVeterinarioRepository
         return dono?.Id;
     }
 
-    public async Task<bool> ExistePorIdAsync(Guid userId)
+    public async Task<bool> ExistePorIdAsync(Guid id)
     {
-        return await _context.Veterinarios.AnyAsync(d => d.UserId == userId);
+        return await _context.Veterinarios.AnyAsync(d => d.Id== id);
     }
 }

@@ -24,13 +24,10 @@ namespace Fauno.Agenda.Application.UseCases
 
         public async Task<IEnumerable<AppointmentResponseDto>> Run(DateOnly? date, Guid userId)
         {
-            //Guid VetenerianId = await _registerGateway.GetVeterinarianIdByUserId(userId);
-            //if (VetenerianId == Guid.Empty)
-            //    throw new DomainException("Usuário não é um veterinário.");
-            Guid OwnerId = userId; // Tira isso pelor né
-            bool ownerExists = await _registerGateway.OwnerExists(OwnerId);
-            if (!ownerExists)
-                throw new DomainException("Dono de pet inválido.");
+            Guid OwnerId = await _registerGateway.GetOwnerIdByUserIdAsync(userId);
+            if (OwnerId == Guid.Empty)
+                throw new DomainException("Usuário inválido");
+            
 
             var appointments = date.HasValue
                 ? await _appointmentRepository.GetByOwnerAndDateAsync(OwnerId, date.Value)

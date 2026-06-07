@@ -1,16 +1,13 @@
 ﻿using Fauno.Register.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Fauno.Register.Infrastructure.Data.Context
 {
     public class Context : DbContext
     {
-        public DbSet<Dono> Donos { get; set; }
-        public DbSet<Pet> Pets { get; set; }
-        public DbSet<Veterinario> Veterinarios { get; set; }
+        public DbSet<Dono> Donos => Set<Dono>();
+        public DbSet<Pet> Pets => Set<Pet>();
+        public DbSet<Veterinario> Veterinarios => Set<Veterinario>();
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -21,6 +18,9 @@ namespace Fauno.Register.Infrastructure.Data.Context
             modelBuilder.Entity<Dono>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.UserId).IsRequired();
+                entity.Property(x => x.CreatedAt).IsRequired();
+                entity.Property(x => x.RemovedAt);
                 
                 entity.OwnsOne(x => x.Cpf, cpf =>
                 {
@@ -44,6 +44,9 @@ namespace Fauno.Register.Infrastructure.Data.Context
             modelBuilder.Entity<Veterinario>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.UserId).IsRequired();
+                entity.Property(x => x.CreatedAt).IsRequired();
+                entity.Property(x => x.RemovedAt);
 
                 entity.OwnsOne(x => x.Cpf, cpf =>
                 {

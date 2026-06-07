@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Fauno.Register.Application.UseCases;
 using Fauno.Register.Application.DTOs.Requests;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fauno.Register.Api.Controllers;
 
@@ -10,13 +12,16 @@ namespace Fauno.Register.Api.Controllers;
 [Route("api/cadastros/donos")]
 public class DonoController : ControllerBase
 {
-    private readonly CadastrarDonoUseCase _useCase;
+    private readonly CadastrarDonoUseCase _cadastrarDonoUseCase;
     private readonly ObterDonoIdPorUserIdUseCase _obterDonoIdUseCase;
     private readonly VerificarDonoExisteUseCase _verificarDonoExisteUseCase;
 
-    public DonoController(CadastrarDonoUseCase useCase)
+    public DonoController(CadastrarDonoUseCase cadastrarDonoUseCase, ObterDonoIdPorUserIdUseCase obterDonoIdUseCase, VerificarDonoExisteUseCase verificarDonoExisteUseCase)
     {
-        _useCase = useCase;
+        _cadastrarDonoUseCase = cadastrarDonoUseCase;
+        _obterDonoIdUseCase = obterDonoIdUseCase;
+        _verificarDonoExisteUseCase = verificarDonoExisteUseCase;
+
     }
 
     [HttpPost]
@@ -24,7 +29,7 @@ public class DonoController : ControllerBase
     {
         try
         {
-            var dono = await _useCase.Run(request);
+            var dono = await _cadastrarDonoUseCase.Run(request);
             return Created($"/api/cadastros/donos/{dono.Id}", new { dono.Id, dono.Nome, Cpf = dono.Cpf.Numero });
         }
         catch (Exception ex)
@@ -32,7 +37,7 @@ public class DonoController : ControllerBase
             return BadRequest(new { erro = ex.Message });
         }
     }
-    
+    [Authorize]
     [HttpGet("usuario/{userId}/id")]
     public async Task<IActionResult> GetOwnerIdByUserId(Guid userId)
     {
@@ -41,11 +46,11 @@ public class DonoController : ControllerBase
     
         return Ok(new { ownerId = id });
     }
-
-    [HttpGet("usuario/{userId}/existe")]
-    public async Task<IActionResult> OwnerExists(Guid id)
+    [Authorize]
+    [HttpGet("usuario/{ownerId}/existe")]
+    public async Task<IActionResult> OwnerExists(Guid ownerId)
     {
-        var existe = await _verificarDonoExisteUseCase.Run(id);
+        var existe = await _verificarDonoExisteUseCase.Run(ownerId);
         return Ok(existe);
     }
 }

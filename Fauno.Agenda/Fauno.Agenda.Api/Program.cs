@@ -14,10 +14,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var jwtSecret = jwtSettings["Secret"];
@@ -25,6 +23,7 @@ var jwtSecret = jwtSettings["Secret"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -62,12 +61,11 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 34));
 builder.Services.AddDbContext<AgendaDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-// Repositories
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAvailabilityRuleRepository, AvailabilityRuleRepository>();
 builder.Services.AddScoped<IAvailabilityExceptionRepository, AvailabilityExceptionRepository>();
 
-// Use Cases
+
 builder.Services.AddScoped<MakeAppointmentUseCase>();
 builder.Services.AddScoped<CancelAppointmentUseCase>();
 builder.Services.AddScoped<ConfirmAppointmentUseCase>();
@@ -79,12 +77,14 @@ builder.Services.AddScoped<RemoveAvailabilityRuleUseCase>();
 builder.Services.AddScoped<CreateAvailabilityExceptionUseCase>();
 builder.Services.AddScoped<GetAvailableSlotsUseCase>();
 
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<JwtDelegatingHandler>();
 builder.Services.AddHttpClient<IRegisterGateway, RegisterApiClient>(
     client =>
     {
-        client.BaseAddress = new Uri("http://localhost:8000/");
-    });
+        client.BaseAddress = new Uri("https://localhost:7273/api/cadastros/");
+    })
+    .AddHttpMessageHandler<JwtDelegatingHandler>();
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>

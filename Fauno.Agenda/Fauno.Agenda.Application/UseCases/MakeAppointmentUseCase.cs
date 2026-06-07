@@ -32,20 +32,17 @@ namespace Fauno.Agenda.Application.UseCases
 
         public async Task Run(AppointmentDto appointmentDto, Guid userId)
         {
-            //Guid ownerId = await _registerGateway.GetOwnerIdByUserId(userId);
-            //if(veterinarianId is null)
-            //    throw new DomainException("Usuário não é veterinário.");
-            //bool ownerExisted = await _registerGateway.OwnerExists(ownerId);
-            //bool petExisted = await _registerGateway.PetExists(ownerId, appointmentDto.PetId);
-            //bool vetExisted = await _registerGateway.VeterinarianExists(appointmentDto.VeterinarianId);
+            Guid ownerId = await _registerGateway.GetOwnerIdByUserIdAsync(userId);
+            if (ownerId == Guid.Empty)
+                throw new DomainException("Usuário inválido.");
+            bool ownerExisted = await _registerGateway.OwnerExists(ownerId);
+            bool petExisted = await _registerGateway.PetExists(ownerId, appointmentDto.PetId);
+            bool vetExisted = await _registerGateway.VeterinarianExists(appointmentDto.VeterinarianId);
 
-            //if (!ownerExisted)
-            //    throw new DomainException("Dono de pet inválido");
-            //if (!petExisted)
-            //    throw new DomainException("Pet inválido");
-            //if (!vetExisted)
-            //    throw new DomainException("Veterinário inválido");
-            var ownerId = userId;
+            if (!petExisted)
+                throw new DomainException("Pet inválido");
+            if (!vetExisted)
+                throw new DomainException("Veterinário inválido");
             bool hasConflict = await _appointmentRepository.HasConflictAsync(
                 appointmentDto.VeterinarianId,
                 appointmentDto.Start,

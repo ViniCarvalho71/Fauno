@@ -1,8 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Fauno.Register.Application.DTOs.Requests;
 using Fauno.Register.Application.UseCases;
-using Fauno.Register.Application.DTOs.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Fauno.Register.Api.Controllers;
 
@@ -10,13 +12,17 @@ namespace Fauno.Register.Api.Controllers;
 [Route("api/cadastros/veterinarios")]
 public class VeterinarioController : ControllerBase
 {
-    private readonly CadastrarVeterinarioUseCase _useCase;
+    private readonly CadastrarVeterinarioUseCase _cadastrarVeterinarioUseCase;
     private readonly ObterVeterinarioIdPorUserIdUseCase _obterVetIdUseCase;
     private readonly VerificarVeterinarioExisteUseCase _verificarVetExisteUseCase;
 
-    public VeterinarioController(CadastrarVeterinarioUseCase useCase)
+    public VeterinarioController(CadastrarVeterinarioUseCase cadastrarVeterinarioUseCase, 
+        ObterVeterinarioIdPorUserIdUseCase obterVetIdUseCase,
+        VerificarVeterinarioExisteUseCase verificarVeterinarioExisteUseCase)
     {
-        _useCase = useCase;
+        _cadastrarVeterinarioUseCase = cadastrarVeterinarioUseCase;
+        _obterVetIdUseCase = obterVetIdUseCase;
+        _verificarVetExisteUseCase = verificarVeterinarioExisteUseCase;
     }
 
     [HttpPost]
@@ -24,7 +30,7 @@ public class VeterinarioController : ControllerBase
     {
         try
         {
-            var vet = await _useCase.Run(request);
+            var vet = await _cadastrarVeterinarioUseCase.Run(request);
             return Created($"/api/cadastros/veterinarios/{vet.Id}", new { vet.Id, vet.Nome, Cpf = vet.Cpf.Numero });
         }
         catch (Exception ex)
@@ -32,7 +38,7 @@ public class VeterinarioController : ControllerBase
             return BadRequest(new { erro = ex.Message });
         }
     }
-    
+    [Authorize]
     [HttpGet("usuario/{userId}/id")]
     public async Task<IActionResult> GetVeterinarianIdByUserId(Guid userId)
     {
@@ -41,11 +47,11 @@ public class VeterinarioController : ControllerBase
     
         return Ok(new { veterinarianId = id });
     }
-
-    [HttpGet("usuario/{userId}/existe")]
-    public async Task<IActionResult> VeterinarianExists(Guid id)
+    [Authorize]
+    [HttpGet("usuario/{veterinarianId}/existe")]
+    public async Task<IActionResult> VeterinarianExists(Guid veterinarianId)
     {
-        var existe = await _verificarVetExisteUseCase.Run(id);
+        var existe = await _verificarVetExisteUseCase.Run(veterinarianId);
         return Ok(existe);
     }
 }
