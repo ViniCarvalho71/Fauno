@@ -17,7 +17,7 @@ namespace Fauno.Auth.Infrastructure.Repositories
             _context = context;
         }
 
-        public long CreateUser(User user)
+        public Guid CreateUser(User user)
         {
             user.CreatedAt = DateTime.UtcNow;
             user.UpdatedAt = DateTime.UtcNow;
@@ -35,7 +35,7 @@ namespace Fauno.Auth.Infrastructure.Repositories
             return user;
         }
 
-        public User GetUsertById(long id)
+        public User GetUsertById(Guid id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             return user;

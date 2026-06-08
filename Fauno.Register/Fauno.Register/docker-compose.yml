@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: fauno-register-mysql
+    restart: unless-stopped
+    networks:
+      - fauno-network
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: fauno_register
+      MYSQL_USER: fauno
+      MYSQL_PASSWORD: fauno123
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  register-api:
+    build:
+      context: .
+      dockerfile: Fauno.Register.Api/Dockerfile
+    container_name: fauno-register-api
+
+    networks:
+      - fauno-network
+
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Server=mysql;Port=3306;Database=fauno_register;User=fauno;Password=fauno123;
+    ports:
+      - "8082:8080"
+      
+networks:
+  fauno-network:
+    external: true
+volumes:
+  mysql_data:

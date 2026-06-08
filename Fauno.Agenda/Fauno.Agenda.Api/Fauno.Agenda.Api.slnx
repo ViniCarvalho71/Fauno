@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path=".dockerignore" />
+    <File Path="docker-compose.yml" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="../Fauno.Agenda.Application/Fauno.Agenda.Application.csproj" />
+  <Project Path="../Fauno.Agenda.Domain/Fauno.Agenda.Domain.csproj" />
+  <Project Path="../Fauno.Agenda.Infrastructure/Fauno.Agenda.Infrastructure.csproj" />
+  <Project Path="Fauno.Agenda.Api.csproj" />
+</Solution>

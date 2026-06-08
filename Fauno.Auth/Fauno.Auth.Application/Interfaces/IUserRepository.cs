@@ -8,7 +8,7 @@ namespace Fauno.Auth.Application.Interfaces
     public interface IUserRepository
     {
         User GetUserByEmail(string email);
-        User GetUsertById(long id);
-        long CreateUser(User user);
+        User GetUsertById(Guid id);
+        Guid CreateUser(User user);
     }
 }

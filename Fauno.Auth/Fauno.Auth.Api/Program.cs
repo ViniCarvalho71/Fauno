@@ -54,8 +54,9 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<Context>();
-    context.Database.Migrate();
+    var db = scope.ServiceProvider.GetRequiredService<Context>();
+
+    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
@@ -65,10 +66,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-if (!string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Docker", StringComparison.OrdinalIgnoreCase))
-{
-    app.UseHttpsRedirection();
-}
+
 
 app.UseAuthentication();
 app.UseAuthorization();

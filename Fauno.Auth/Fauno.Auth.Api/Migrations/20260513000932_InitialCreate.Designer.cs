@@ -27,11 +27,8 @@ namespace Fauno.Auth.Api.Migrations
 
             modelBuilder.Entity("Fauno.Auth.Domain.Entities.User", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -48,8 +45,8 @@ namespace Fauno.Auth.Api.Migrations
                 {
                     b.OwnsOne("Fauno.Auth.Domain.ValueObjects.Email", "Email", b1 =>
                         {
-                            b1.Property<long>("UserId")
-                                .HasColumnType("bigint");
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("char(36)");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
@@ -66,8 +63,8 @@ namespace Fauno.Auth.Api.Migrations
 
                     b.OwnsOne("Fauno.Auth.Domain.ValueObjects.Password", "Password", b1 =>
                         {
-                            b1.Property<long>("UserId")
-                                .HasColumnType("bigint");
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("char(36)");
 
                             b1.Property<string>("Value")
                                 .IsRequired()

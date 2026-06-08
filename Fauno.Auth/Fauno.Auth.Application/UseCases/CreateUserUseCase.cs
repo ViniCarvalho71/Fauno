@@ -21,7 +21,7 @@ namespace Fauno.Auth.Application.UseCases
             _passwordHasher = passwordHasher;
         }
 
-        public long Run(CreateUserRequestVm request)
+        public Guid Run(CreateUserRequestVm request)
         {
             try
             {

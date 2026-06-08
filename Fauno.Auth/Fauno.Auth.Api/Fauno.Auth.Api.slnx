@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="docker-compose.yml" />
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="../Fauno.Auth.Application/Fauno.Auth.Application.csproj" Id="f5779575-d888-4790-9354-6626cce7c7ed" />
   <Project Path="../Fauno.Auth.Domain/Fauno.Auth.Domain.csproj" />
   <Project Path="../Fauno.Auth.Repository/Fauno.Auth.Infrastructure.csproj" />

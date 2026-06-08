@@ -19,6 +19,9 @@ namespace Fauno.Auth.Infrastructure.Data.Context
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(x => x.Id);
+                entity.Property(x => x.Id)
+                    .HasColumnType("char(36)")
+                    .ValueGeneratedNever();
 
                 entity.OwnsOne(x => x.Email, email =>
                 {
