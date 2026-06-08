@@ -4,16 +4,16 @@ services:
     container_name: fauno-auth-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change_this_root_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
       MYSQL_DATABASE: faunoauthdb
-      MYSQL_USER: ${MYSQL_USER:-faunoauth}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-change_this_app_password}
+      MYSQL_USER: ${MYSQL_USER:?MYSQL_USER is required}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
     ports:
       - "3306:3306"
     volumes:
       - faunoauth_mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-change_this_root_password}"]
+      test: ["CMD-SHELL", "MYSQL_PWD=$MYSQL_PASSWORD mysqladmin ping -h localhost -u$MYSQL_USER --silent"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -31,7 +31,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Default: server=db;port=3306;database=faunoauthdb;user=${MYSQL_USER:-faunoauth};password=${MYSQL_PASSWORD:-change_this_app_password};Persist Security Info=False;Convert Zero Datetime=True;SslMode=Preferred
+      ConnectionStrings__Default: server=db;port=3306;database=faunoauthdb;user=${MYSQL_USER:?MYSQL_USER is required};password=${MYSQL_PASSWORD:?MYSQL_PASSWORD is required};Persist Security Info=False;Convert Zero Datetime=True;SslMode=Preferred
     ports:
       - "8080:8080"
 
