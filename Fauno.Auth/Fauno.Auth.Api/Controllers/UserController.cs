@@ -12,10 +12,12 @@ namespace Fauno.Auth.Api.Controllers
     {
         private readonly LoginUseCase _loginUseCase;
         private readonly CreateUserUseCase _createUserUseCase;
-        public UserController(LoginUseCase loginUseCase, CreateUserUseCase createUserUseCase)
+        private readonly DeleteUserUseCase _deleteUserUseCase;
+        public UserController(LoginUseCase loginUseCase, CreateUserUseCase createUserUseCase, DeleteUserUseCase deleteUserUseCase)
         {
             _loginUseCase = loginUseCase;
             _createUserUseCase = createUserUseCase;
+            _deleteUserUseCase = deleteUserUseCase;
         }
 
         [HttpPost("Login")]
@@ -26,10 +28,11 @@ namespace Fauno.Auth.Api.Controllers
                 LoginReponseVm response = _loginUseCase.Run(loginData);
                 return Ok(response);
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
-            
+
         }
 
         [HttpPost("CreateUser")]
@@ -44,12 +47,26 @@ namespace Fauno.Auth.Api.Controllers
                     Id = userId
                 });
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            
+
         }
 
+        [HttpDelete("DeleteUser/{id}")]
+        public IActionResult DeleteUser(Guid id)
+        {
+            try
+            {
+                _deleteUserUseCase.Run(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

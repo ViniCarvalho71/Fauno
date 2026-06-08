@@ -29,7 +29,11 @@ namespace Fauno.Agenda.Infrastructure.Http
             return result.Id;
         }
 
-        
+        public async void DeleteUser(Guid id)
+        {
+           var response = await _http.DeleteAsync($"User/DeleteUser/{id}");
 
+           response.EnsureSuccessStatusCode();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Fauno.Auth.Domain.Entities;
 using Fauno.Auth.Domain.ValueObjects;
 using Fauno.Auth.Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,13 @@ namespace Fauno.Auth.Infrastructure.Repositories
             _context.SaveChanges();
 
             return user.Id;
+        }
+
+        public void DeleteUser(Guid id)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Id == id);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
         }
 
         public User GetUserByEmail(string email)

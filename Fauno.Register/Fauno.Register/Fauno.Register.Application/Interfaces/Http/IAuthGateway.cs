@@ -7,5 +7,6 @@ namespace Fauno.Register.Application.Interfaces.Http
     public interface IAuthGateway
     {
         Task<Guid> CreateUser(string email, string password);
+        void DeleteUser(Guid id);
     }
 }

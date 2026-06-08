@@ -10,5 +10,6 @@ namespace Fauno.Auth.Application.Interfaces
         User GetUserByEmail(string email);
         User GetUsertById(Guid id);
         Guid CreateUser(User user);
+        void DeleteUser(Guid id);
     }
 }
