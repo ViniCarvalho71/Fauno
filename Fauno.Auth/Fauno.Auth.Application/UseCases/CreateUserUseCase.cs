@@ -29,7 +29,7 @@ namespace Fauno.Auth.Application.UseCases
                _userRepository.GetUserByEmail(request.Email);
 
                 if (existingUser != null)
-                    throw new Exception("Usuário já existe");
+                    throw new Exception("Email já cadastrado");
 
                 var email = new Email(request.Email);
                 var password = new Password(request.Password);

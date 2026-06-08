@@ -32,7 +32,6 @@ namespace Fauno.Auth.Infrastructure.Repositories
         public User GetUserByEmail(string email)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email.Value == email);
-
             return user;
         }
 
