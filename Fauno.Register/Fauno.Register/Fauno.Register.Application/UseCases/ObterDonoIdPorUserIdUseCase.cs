@@ -10,4 +10,5 @@ public class ObterDonoIdPorUserIdUseCase
     public ObterDonoIdPorUserIdUseCase(IDonoRepository repo) => _repo = repo;
 
     public async Task<Guid?> Run(Guid userId) => await _repo.ObterIdPorUserIdAsync(userId);
+    
 }

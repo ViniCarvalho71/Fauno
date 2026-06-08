@@ -17,6 +17,7 @@ public class VeterinarioRepository : IVeterinarioRepository
 
     public async Task SalvarAsync(Veterinario vet)
     {
+
         await _context.Veterinarios.AddAsync(vet);
         await _context.SaveChangesAsync();
     }

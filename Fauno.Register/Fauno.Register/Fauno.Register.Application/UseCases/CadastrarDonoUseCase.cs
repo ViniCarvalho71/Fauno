@@ -26,9 +26,18 @@ public class CadastrarDonoUseCase
         var userId = await _authGateway.CreateUser(request.Email, request.Password);
         if (userId == Guid.Empty)
             throw new Exception("Falha ao criar usuário.");
-        var dono = new Dono(userId, request.Nome, cpfLimpo, request.Email);
-        await _donoRepository.SalvarAsync(dono);
 
-        return dono;
+        try
+        {
+            var dono = new Dono(userId, request.Nome, cpfLimpo, request.Email);
+            await _donoRepository.SalvarAsync(dono);
+
+            return dono;
+        }
+        catch (Exception ex)
+        {
+            _authGateway.DeleteUser(userId);
+            throw new Exception ("Ocorreu um erro ao cadastrar o usuário: " + ex.Message);
+        }
     }
 }

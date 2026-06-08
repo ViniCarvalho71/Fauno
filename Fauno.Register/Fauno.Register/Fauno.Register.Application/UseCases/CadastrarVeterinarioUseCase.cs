@@ -21,14 +21,25 @@ public class CadastrarVeterinarioUseCase
 
     public async Task<Veterinario> Run(CadastrarVeterinarioRequest request)
     {
+        
         var cpfLimpo = request.Cpf.Replace(".", "").Replace("-", "");
 
         if (await _vetRepository.ExisteCpfAsync(cpfLimpo))
             throw new Exception("Já existe um veterinário cadastrado com este CPF.");
         var userId = await _authGateway.CreateUser(request.Email, request.Password);
-        var vet = new Veterinario(userId, request.Nome, cpfLimpo, request.Crmv);
-        await _vetRepository.SalvarAsync(vet);
+        if (userId == Guid.Empty)
+            throw new Exception("Falha ao criar usuário.");
+        try
+        {
+            var vet = new Veterinario(userId, request.Nome, cpfLimpo, request.Crmv);
+            await _vetRepository.SalvarAsync(vet);
 
-        return vet;
+            return vet;
+        }
+        catch (Exception ex)
+        {
+            _authGateway.DeleteUser(userId);
+            throw new Exception ("Ocorreu um erro ao cadastrar o usuário: " + ex.Message);
+        }
     }
 }

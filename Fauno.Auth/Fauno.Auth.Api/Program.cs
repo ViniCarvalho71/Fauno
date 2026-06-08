@@ -18,6 +18,8 @@ var secretKey = jwtSettings["Secret"];
 
 builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<CreateUserUseCase>();
+builder.Services.AddScoped<DeleteUserUseCase>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
