@@ -17,38 +17,30 @@ namespace Fauno.Auth.Infrastructure.Repositories
             _context = context;
         }
 
+        public Guid CreateUser(User user)
+        {
+            user.CreatedAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            _context.Users.Add(user);
+
+            _context.SaveChanges();
+
+            return user.Id;
+        }
+
         public User GetUserByEmail(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == new Email(email));
+            var user = _context.Users.FirstOrDefault(u => u.Email.Value == email);
 
             return user;
         }
 
-        public User GetUsertById(long id)
+        public User GetUsertById(Guid id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             return user;
         }
 
-        public void UpdateUser(User user)
-        {
-            try
-            {
-                var existingUser = GetUsertById(user.Id);
-                if (existingUser == null)
-                {
-                    throw new Exception("Usuário não encontrado");
-                }
-
-                existingUser.Email = user.Email;
-                existingUser.GoogleToken = user.GoogleToken;
-                existingUser.UpdatedAt = DateTime.UtcNow;
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao atualizar o usuário: " + ex.Message);
-            }
-        }
     }
 }

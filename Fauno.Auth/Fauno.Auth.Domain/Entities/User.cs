@@ -7,8 +7,20 @@ namespace Fauno.Auth.Domain.Entities
 {
     public class User : EntityBase
     {
-        public Email Email { get; set; }
-        public Password Password { get; set; }
-        public string GoogleToken { get; set; }
+        public Email Email { get; private set; }
+
+        public string PasswordHash { get; private set; }
+
+        protected User()
+        {
+        }
+
+        public User(
+            Email email,
+            string passwordHash)
+        {
+            Email = email;
+            PasswordHash = passwordHash;
+        }
     }
 }

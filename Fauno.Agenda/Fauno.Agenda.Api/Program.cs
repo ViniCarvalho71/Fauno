@@ -82,7 +82,8 @@ builder.Services.AddTransient<JwtDelegatingHandler>();
 builder.Services.AddHttpClient<IRegisterGateway, RegisterApiClient>(
     client =>
     {
-        client.BaseAddress = new Uri("https://localhost:7273/api/cadastros/");
+        client.BaseAddress = new Uri(builder.Configuration["RegisterApi:BaseUrl"]);
+
     })
     .AddHttpMessageHandler<JwtDelegatingHandler>();
 builder.Services.AddOpenApi(options =>

@@ -8,10 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.16">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.14.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Fauno.Auth.Application\Fauno.Auth.Application.csproj" />
+    <ProjectReference Include="..\Fauno.Auth.Domain\Fauno.Auth.Domain.csproj" />
     <ProjectReference Include="..\Fauno.Auth.Repository\Fauno.Auth.Infrastructure.csproj" />
   </ItemGroup>
 

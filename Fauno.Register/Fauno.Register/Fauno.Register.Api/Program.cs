@@ -56,8 +56,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+var serverVersion = new MySqlServerVersion(new Version(8, 4, 9));
+
 builder.Services.AddDbContext<Context>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, serverVersion));
 
 builder.Services.AddScoped<IDonoRepository, DonoRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();

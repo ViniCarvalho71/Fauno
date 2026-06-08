@@ -27,49 +27,56 @@ namespace Fauno.Auth.Application.UseCases
 
         public LoginReponseVm Run(LoginRequestVm loginData)
         {
-            var password = new Password(loginData.Password);
-
-            var user = _userRepository.GetUserByEmail(loginData.Email);
-
-            if (user == null)
-                return null;
-
-            var passwordValid = _passwordHasher.Verify(
-                password.Value,
-                user.Password.Value
-            );
-
-            if (!passwordValid)
-                return null;
-
-            var secretKey = _configuration["JwtSettings:Secret"];
-            var issuer = _configuration["JwtSettings:Issuer"];
-            var audience = _configuration["JwtSettings:Audience"];
-            var expirationInMinutes = int.Parse(_configuration["JwtSettings:ExpirationInMinutes"] ?? "60");
-
-            var key = Encoding.ASCII.GetBytes(secretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(new[]
+                var password = new Password(loginData.Password);
+
+                var user = _userRepository.GetUserByEmail(loginData.Email);
+
+                if (user == null)
+                    throw new Exception("Email ou senha inválidos");
+
+                var passwordValid = _passwordHasher.Verify(
+                    password.Value,
+                    user.PasswordHash
+                );
+
+                if (!passwordValid)
+                    throw new Exception("Email ou senha inválidos");
+
+                var secretKey = _configuration["JwtSettings:Secret"];
+                var issuer = _configuration["JwtSettings:Issuer"];
+                var audience = _configuration["JwtSettings:Audience"];
+                var expirationInMinutes = int.Parse(_configuration["JwtSettings:ExpirationInMinutes"] ?? "60");
+
+                var key = Encoding.ASCII.GetBytes(secretKey);
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    new Claim(ClaimTypes.Name, loginData.Email),
+                    Subject = new ClaimsIdentity(new[]
+                    {
                     new Claim(ClaimTypes.Email, loginData.Email),
-                    new Claim("google_access_token", user.GoogleToken)
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(expirationInMinutes),
-                Issuer = issuer,
-                Audience = audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                    Expires = DateTime.UtcNow.AddMinutes(expirationInMinutes),
+                    Issuer = issuer,
+                    Audience = audience,
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new LoginReponseVm
+                return new LoginReponseVm
+                {
+                    Token = tokenHandler.WriteToken(token),
+                    ExpiresAt = tokenDescriptor.Expires.Value
+                };
+            }
+            catch (Exception ex)
             {
-                Token = tokenHandler.WriteToken(token),
-                ExpiresAt = tokenDescriptor.Expires.Value
-            };
+                throw new Exception(ex.Message);
+            }
+            
         }
     }
 }

@@ -1,5 +1,5 @@
 services:
-  api:
+  agenda-api:
     build:
       context: ..
       dockerfile: Fauno.Agenda.Api/Dockerfile
@@ -14,16 +14,16 @@ services:
 
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=fauno_agenda;User=root;Password=mysql123;
-      - RegisterApi__BaseUrl=http://register-api:8080/
+      - ConnectionStrings__DefaultConnection=Server=agenda-mysql;Port=3306;Database=fauno_agenda;User=root;Password=mysql123;
+      - RegisterApi__BaseUrl=http://register-api:8080/api/cadastros/
 
     depends_on:
-      mysql:
+      agenda-mysql:
         condition: service_healthy
 
     restart: on-failure
 
-  mysql:
+  agenda-mysql:
     image: mysql:8.4
     container_name: fauno-agenda-mysql
 
@@ -35,7 +35,7 @@ services:
       MYSQL_ROOT_PASSWORD: mysql123
 
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
     volumes:
       - mysql_data:/var/lib/mysql

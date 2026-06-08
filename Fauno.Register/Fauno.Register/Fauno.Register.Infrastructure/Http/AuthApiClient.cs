@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using Fauno.Register.Application.Interfaces.Http;
+using Fauno.Register.Application.DTOs;
 namespace Fauno.Agenda.Infrastructure.Http
 
 {
@@ -20,7 +21,7 @@ namespace Fauno.Agenda.Infrastructure.Http
                 Email = email,
                 Password = password
             };
-            var response = await _http.PostAsJsonAsync("/api/v1/auth/create-user", payload);
+            var response = await _http.PostAsJsonAsync("User/CreateUser", payload);
             
             response.EnsureSuccessStatusCode();
 
