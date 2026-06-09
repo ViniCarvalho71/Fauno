@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Fauno.Register.Domain.Entities;
 using Fauno.Register.Domain.Repositories;
 
 namespace Fauno.Register.Application.UseCases;
