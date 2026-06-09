@@ -11,6 +11,11 @@ namespace Fauno.Agenda.Application.Interfaces.Http
         Task<bool> VeterinarianExists(Guid veterinarianId);
         Task<Guid> GetVeterinarianIdByUserIdAsync(Guid userId);
         Task<Guid> GetOwnerIdByUserIdAsync(Guid userId);
+        Task<string> GetVeterinarianNameById(Guid veterinarianId);
+        Task<string> GetOwnerNameById(Guid ownerId);
+        public Task<string> GetPetNameById(Guid petId);
+
+
 
     }
 }

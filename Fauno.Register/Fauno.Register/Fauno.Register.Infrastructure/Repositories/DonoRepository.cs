@@ -36,4 +36,9 @@ public class DonoRepository : IDonoRepository
     {
         return await _context.Donos.AnyAsync(d => d.Id== id);
     }
+
+    public async Task<Dono?> ObterPorIdAsync(Guid id)
+    {
+        return await _context.Donos.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
+    }
 }

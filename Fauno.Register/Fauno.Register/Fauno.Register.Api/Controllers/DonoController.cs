@@ -14,12 +14,14 @@ public class DonoController : ControllerBase
 {
     private readonly CadastrarDonoUseCase _cadastrarDonoUseCase;
     private readonly ObterDonoIdPorUserIdUseCase _obterDonoIdUseCase;
+    private readonly ObterDonoPorIdUseCase _obterDonoPorIdUseCase;
     private readonly VerificarDonoExisteUseCase _verificarDonoExisteUseCase;
 
-    public DonoController(CadastrarDonoUseCase cadastrarDonoUseCase, ObterDonoIdPorUserIdUseCase obterDonoIdUseCase, VerificarDonoExisteUseCase verificarDonoExisteUseCase)
+    public DonoController(CadastrarDonoUseCase cadastrarDonoUseCase, ObterDonoIdPorUserIdUseCase obterDonoIdUseCase, ObterDonoPorIdUseCase obterDonoPorIdUseCase, VerificarDonoExisteUseCase verificarDonoExisteUseCase)
     {
         _cadastrarDonoUseCase = cadastrarDonoUseCase;
         _obterDonoIdUseCase = obterDonoIdUseCase;
+        _obterDonoPorIdUseCase = obterDonoPorIdUseCase;
         _verificarDonoExisteUseCase = verificarDonoExisteUseCase;
 
     }
@@ -36,6 +38,15 @@ public class DonoController : ControllerBase
         {
             return BadRequest(new { erro = ex.Message });
         }
+    }
+    [Authorize]
+    [HttpGet("{ownerId}")]
+    public async Task<IActionResult> GetOwner(Guid ownerId)
+    {
+        var dono = await _obterDonoPorIdUseCase.Run(ownerId);
+        if (dono == null) return NotFound(new { mensagem = "Dono não encontrado." });
+
+        return Ok(dono);
     }
     [Authorize]
     [HttpGet("usuario/{userId}/id")]

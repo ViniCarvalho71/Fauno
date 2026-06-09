@@ -23,54 +23,69 @@ namespace Fauno.Agenda.Infrastructure.Migrations
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Appointment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("char(36)");
 
-                    b.Property<string>("AppointmentType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                b.Property<string>("AppointmentType")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("varchar(50)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
+                b.Property<string>("Description")
+                    .HasMaxLength(1000)
+                    .HasColumnType("varchar(1000)");
 
-                    b.Property<DateTime>("End")
-                        .HasColumnType("datetime(6)");
+                b.Property<DateTime>("End")
+                    .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("char(36)");
+                b.Property<Guid>("OwnerId")
+                    .HasColumnType("char(36)");
 
-                    b.Property<Guid>("PetId")
-                        .HasColumnType("char(36)");
+                b.Property<string>("OwnerName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("varchar(200)");
 
-                    b.Property<DateTime?>("RemovedAt")
-                        .HasColumnType("datetime(6)");
+                b.Property<Guid>("PetId")
+                    .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("datetime(6)");
+                b.Property<string>("PetName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("varchar(200)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                b.Property<DateTime?>("RemovedAt")
+                    .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Title")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                b.Property<DateTime>("Start")
+                    .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("VeterinarianId")
-                        .HasColumnType("char(36)");
+                b.Property<string>("Status")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("varchar(50)");
 
-                    b.HasKey("Id");
+                b.Property<string>("Title")
+                    .HasMaxLength(200)
+                    .HasColumnType("varchar(200)");
 
-                    b.ToTable("Appointments", (string)null);
-                });
+                b.Property<Guid>("VeterinarianId")
+                    .HasColumnType("char(36)");
+
+                b.Property<string>("VeterinarianName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("varchar(200)");
+
+                b.HasKey("Id");
+
+                b.ToTable("Appointments", (string)null);
+            });
 
             modelBuilder.Entity("Fauno.Agenda.Domain.Entities.AvailabilityException", b =>
                 {

@@ -41,8 +41,11 @@ namespace Fauno.Agenda.Application.UseCases
                 Status = a.Status.ToString(),
                 AppointmentType = a.AppointmentType.ToString(),
                 VeterinarianId = a.VeterinarianId,
+                VeterinarianName = a.VeterinarianName,
                 OwnerId = a.OwnerId,
+                OwnerName= a.OwnerName,
                 PetId = a.PetId,
+                PetName= a.PetName,
                 Start = a.Start,
                 End = a.End,
                 CreatedAt = a.CreatedAt

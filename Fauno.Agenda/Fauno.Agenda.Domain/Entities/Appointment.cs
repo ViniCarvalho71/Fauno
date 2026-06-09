@@ -9,8 +9,11 @@ public class Appointment : EntityBase
     public AppointmentStatus Status { get; private set; }
     public AppointmentType AppointmentType { get; private set; }
     public Guid VeterinarianId { get; private set; }
+    public string VeterinarianName { get; private set; }
     public Guid OwnerId { get; private set; }
+    public string OwnerName { get; private set; }
     public Guid PetId { get; private set; }
+    public string PetName { get; private set; }
     public DateTime Start { get; private set; }
     public DateTime End { get; private set; }
 
@@ -24,14 +27,20 @@ public class Appointment : EntityBase
         Guid petId,
         DateTime start,
         DateTime end,
-        AppointmentType appointmentType)
+        AppointmentType appointmentType,
+        string veterinarianName,
+        string ownerName,
+        string petName)
     {
         Title = title ?? "Consulta";
         Description = description ?? "Sem descrição";
         Status = AppointmentStatus.Scheduled;
         VeterinarianId = veterinarianId;
+        VeterinarianName = veterinarianName;
         OwnerId = ownerId;
+        OwnerName = ownerName;
         PetId = petId;
+        PetName = petName;
         Start = start;
         End = end;
         AppointmentType = appointmentType;

@@ -37,4 +37,9 @@ public class VeterinarioRepository : IVeterinarioRepository
     {
         return await _context.Veterinarios.AnyAsync(d => d.Id== id);
     }
+
+    public async Task<Veterinario?> ObterPorIdAsync(Guid id)
+    {
+        return await _context.Veterinarios.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
+    }
 }

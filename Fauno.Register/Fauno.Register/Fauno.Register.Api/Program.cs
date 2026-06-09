@@ -67,8 +67,10 @@ builder.Services.AddScoped<IVeterinarioRepository, VeterinarioRepository>();
 
 builder.Services.AddScoped<CadastrarDonoUseCase>();
 builder.Services.AddScoped<ObterDonoIdPorUserIdUseCase>();
+builder.Services.AddScoped<ObterDonoPorIdUseCase>();
 builder.Services.AddScoped<VerificarDonoExisteUseCase>();
 builder.Services.AddScoped<ObterVeterinarioIdPorUserIdUseCase>();
+builder.Services.AddScoped<ObterVeterinarioPorIdUseCase>();
 builder.Services.AddScoped<VerificarVeterinarioExisteUseCase>();
 builder.Services.AddScoped<VerificarPetExisteUseCase>();
 builder.Services.AddScoped<CadastrarPetUseCase>();

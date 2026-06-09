@@ -14,14 +14,17 @@ public class VeterinarioController : ControllerBase
 {
     private readonly CadastrarVeterinarioUseCase _cadastrarVeterinarioUseCase;
     private readonly ObterVeterinarioIdPorUserIdUseCase _obterVetIdUseCase;
+    private readonly ObterVeterinarioPorIdUseCase _obterVeterinarioPorIdUseCase;
     private readonly VerificarVeterinarioExisteUseCase _verificarVetExisteUseCase;
 
     public VeterinarioController(CadastrarVeterinarioUseCase cadastrarVeterinarioUseCase, 
         ObterVeterinarioIdPorUserIdUseCase obterVetIdUseCase,
+        ObterVeterinarioPorIdUseCase obterVeterinarioPorIdUseCase,
         VerificarVeterinarioExisteUseCase verificarVeterinarioExisteUseCase)
     {
         _cadastrarVeterinarioUseCase = cadastrarVeterinarioUseCase;
         _obterVetIdUseCase = obterVetIdUseCase;
+        _obterVeterinarioPorIdUseCase = obterVeterinarioPorIdUseCase;
         _verificarVetExisteUseCase = verificarVeterinarioExisteUseCase;
     }
 
@@ -37,6 +40,16 @@ public class VeterinarioController : ControllerBase
         {
             return BadRequest(new { erro = ex.Message });
         }
+    }
+
+    [Authorize]
+    [HttpGet("{veterinarianId}")]
+    public async Task<IActionResult> GetVeterinarian(Guid veterinarianId)
+    {
+        var veterinario = await _obterVeterinarioPorIdUseCase.Run(veterinarianId);
+        if (veterinario == null) return NotFound(new { mensagem = "Veterinário não encontrado." });
+
+        return Ok(veterinario);
     }
     [Authorize]
     [HttpGet("usuario/{userId}/id")]

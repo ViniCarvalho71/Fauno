@@ -16,8 +16,11 @@ namespace Fauno.Agenda.Infrastructure.Persistence.Configurations
             builder.Property(a => a.Status).HasConversion<string>().HasMaxLength(50);
             builder.Property(a => a.AppointmentType).HasConversion<string>().HasMaxLength(50);
             builder.Property(a => a.VeterinarianId).IsRequired();
+            builder.Property(a => a.VeterinarianName).HasMaxLength(200);
             builder.Property(a => a.OwnerId).IsRequired();
+            builder.Property(a => a.OwnerName).HasMaxLength(200);
             builder.Property(a => a.PetId).IsRequired();
+            builder.Property(a => a.PetName).HasMaxLength(200);
             builder.Property(a => a.Start).IsRequired();
             builder.Property(a => a.End).IsRequired();
         }

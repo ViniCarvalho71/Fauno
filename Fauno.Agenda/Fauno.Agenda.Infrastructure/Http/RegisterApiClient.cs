@@ -22,6 +22,14 @@ namespace Fauno.Agenda.Infrastructure.Http
             return response?["ownerId"] ?? Guid.Empty;
         }
 
+        public async Task<string> GetOwnerNameById(Guid ownerId)
+        {
+            var owner = await _http.GetFromJsonAsync<OwnerResponse>(
+                $"donos/{ownerId}");
+
+            return owner?.Nome ?? string.Empty;
+        }
+
         public async Task<Guid> GetVeterinarianIdByUserIdAsync(Guid userId)
         {
             var response = await _http.GetFromJsonAsync<Dictionary<string, Guid>>(
@@ -29,6 +37,20 @@ namespace Fauno.Agenda.Infrastructure.Http
 
 
             return response?["veterinarianId"] ?? Guid.Empty;
+        }
+
+        public async Task<string> GetVeterinarianNameById(Guid veterinarianId)
+        {
+            var veterinarian = await _http.GetFromJsonAsync<VeterinarianResponse>(
+                $"veterinarios/{veterinarianId}");
+
+            return veterinarian?.Nome ?? string.Empty;
+        }
+        public async Task<string> GetPetNameById(Guid petId)
+        {
+            var pet = await _http.GetFromJsonAsync<PetResponse>(
+                $"pets/{petId}/historico");
+            return pet?.Pet ?? string.Empty;
         }
 
         public async Task<bool> OwnerExists(Guid ownerId) =>

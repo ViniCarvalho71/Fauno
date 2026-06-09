@@ -12,8 +12,11 @@ namespace Fauno.Agenda.Application.DTOs
         public string Status { get; set; } = null!;
         public string AppointmentType { get; set; } = null!;
         public Guid VeterinarianId { get; set; }
+        public string VeterinarianName { get; set; } = null!;
         public Guid OwnerId { get; set; }
+        public string OwnerName { get; set; } = null!;
         public Guid PetId { get; set; }
+        public string PetName { get; set; } = null!;
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -9,4 +9,5 @@ public interface IVeterinarioRepository
     Task<bool> ExisteCpfAsync(string cpf);
     Task<Guid?> ObterIdPorUserIdAsync(Guid userId);
     Task<bool> ExistePorIdAsync(Guid userId);
+    Task<Veterinario?> ObterPorIdAsync(Guid id);
 }
