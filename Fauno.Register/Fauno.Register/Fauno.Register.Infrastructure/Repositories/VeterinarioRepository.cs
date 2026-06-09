@@ -42,4 +42,8 @@ public class VeterinarioRepository : IVeterinarioRepository
     {
         return await _context.Veterinarios.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
     }
+    public async Task<IEnumerable<Veterinario>> ObterTodosAsync()
+    {
+        return await _context.Veterinarios.Where(v => v.RemovedAt == null).ToListAsync();
+    }
 }

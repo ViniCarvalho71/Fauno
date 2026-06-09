@@ -78,7 +78,8 @@ builder.Services.AddScoped<ListarPetsDoDonoUseCase>();
 builder.Services.AddScoped<AtualizarPetUseCase>();
 builder.Services.AddScoped<BuscarHistoricoPetUseCase>();
 builder.Services.AddScoped<CadastrarVeterinarioUseCase>();
-
+builder.Services.AddScoped<ObterVeterinariosUseCase>();
+builder.Services.AddScoped<ObterTodosDonosUseCase>();
 builder.Services.AddHttpClient<IAuthGateway, RegisterApiClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["AuthApi:BaseUrl"]);

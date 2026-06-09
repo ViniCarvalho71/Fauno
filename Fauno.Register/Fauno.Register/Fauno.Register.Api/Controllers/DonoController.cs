@@ -16,16 +16,23 @@ public class DonoController : ControllerBase
     private readonly ObterDonoIdPorUserIdUseCase _obterDonoIdUseCase;
     private readonly ObterDonoPorIdUseCase _obterDonoPorIdUseCase;
     private readonly VerificarDonoExisteUseCase _verificarDonoExisteUseCase;
-
-    public DonoController(CadastrarDonoUseCase cadastrarDonoUseCase, ObterDonoIdPorUserIdUseCase obterDonoIdUseCase, ObterDonoPorIdUseCase obterDonoPorIdUseCase, VerificarDonoExisteUseCase verificarDonoExisteUseCase)
+    private readonly ObterTodosDonosUseCase _obterTodosDonosUseCase;
+    public DonoController(CadastrarDonoUseCase cadastrarDonoUseCase, ObterDonoIdPorUserIdUseCase obterDonoIdUseCase, ObterDonoPorIdUseCase obterDonoPorIdUseCase, VerificarDonoExisteUseCase verificarDonoExisteUseCase, ObterTodosDonosUseCase obterTodosDonosUseCase)
     {
         _cadastrarDonoUseCase = cadastrarDonoUseCase;
         _obterDonoIdUseCase = obterDonoIdUseCase;
         _obterDonoPorIdUseCase = obterDonoPorIdUseCase;
         _verificarDonoExisteUseCase = verificarDonoExisteUseCase;
-
+        _obterTodosDonosUseCase = obterTodosDonosUseCase;
     }
 
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var donos = await _obterTodosDonosUseCase.Run();
+        return Ok(donos);
+    }
     [HttpPost]
     public async Task<IActionResult> Cadastrar([FromBody] CadastrarDonoRequest request)
     {

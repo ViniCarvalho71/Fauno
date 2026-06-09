@@ -10,4 +10,5 @@ public interface IDonoRepository
     Task<Guid?> ObterIdPorUserIdAsync(Guid userId);
     Task<bool> ExistePorIdAsync(Guid id);
     Task<Dono?> ObterPorIdAsync(Guid id);
+    Task<IEnumerable<Dono>> ObterTodosAsync();
 }

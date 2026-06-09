@@ -41,4 +41,9 @@ public class DonoRepository : IDonoRepository
     {
         return await _context.Donos.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
     }
+
+    public async Task<IEnumerable<Dono>> ObterTodosAsync()
+    {
+        return await _context.Donos.Where(d => d.RemovedAt == null).ToListAsync();
+    }
 }

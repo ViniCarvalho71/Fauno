@@ -16,18 +16,27 @@ public class VeterinarioController : ControllerBase
     private readonly ObterVeterinarioIdPorUserIdUseCase _obterVetIdUseCase;
     private readonly ObterVeterinarioPorIdUseCase _obterVeterinarioPorIdUseCase;
     private readonly VerificarVeterinarioExisteUseCase _verificarVetExisteUseCase;
-
+    private readonly ObterVeterinariosUseCase _obterVeterinariosUseCase;
     public VeterinarioController(CadastrarVeterinarioUseCase cadastrarVeterinarioUseCase, 
         ObterVeterinarioIdPorUserIdUseCase obterVetIdUseCase,
         ObterVeterinarioPorIdUseCase obterVeterinarioPorIdUseCase,
-        VerificarVeterinarioExisteUseCase verificarVeterinarioExisteUseCase)
+        VerificarVeterinarioExisteUseCase verificarVeterinarioExisteUseCase,
+        ObterVeterinariosUseCase obterVeterinariosUseCase)
     {
         _cadastrarVeterinarioUseCase = cadastrarVeterinarioUseCase;
         _obterVetIdUseCase = obterVetIdUseCase;
         _obterVeterinarioPorIdUseCase = obterVeterinarioPorIdUseCase;
         _verificarVetExisteUseCase = verificarVeterinarioExisteUseCase;
+        _obterVeterinariosUseCase = obterVeterinariosUseCase;
     }
 
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var veterinarios = await _obterVeterinariosUseCase.Run();
+        return Ok(veterinarios);
+    }
     [HttpPost]
     public async Task<IActionResult> Cadastrar([FromBody] CadastrarVeterinarioRequest request)
     {

@@ -10,4 +10,5 @@ public interface IVeterinarioRepository
     Task<Guid?> ObterIdPorUserIdAsync(Guid userId);
     Task<bool> ExistePorIdAsync(Guid userId);
     Task<Veterinario?> ObterPorIdAsync(Guid id);
+    Task<IEnumerable<Veterinario>> ObterTodosAsync();
 }

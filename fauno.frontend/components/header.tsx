@@ -1,23 +1,26 @@
-"use client"
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
-import React, { useState } from 'react'
-import { BellIcon, BellRingingIcon } from '@phosphor-icons/react'
+type PageHeaderProps = {
+  title: string;
+  description?: string;
+  action?: React.ReactNode;
+};
 
-type HeaderProps = {
-    title: string;
-}
-
-export default function Header({ title }: HeaderProps) {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const toggleNotification = () => {
-        setIsOpen(!isOpen);
-    }
-
-    return (
-        <div className="flex w-full justify-between items-center gap-4 p-5 px-6">
-            <h1 className="text-3xl font-bold">{title}</h1>
-            <BellRingingIcon size={24} onClick={toggleNotification} />
-        </div>
-    )
+export default function PageHeader({
+  title,
+  description,
+  action,
+}: PageHeaderProps) {
+  return (
+    <header className="bg-background/80 sticky top-0 z-10 flex items-center gap-3 border-b px-4 py-3 backdrop-blur sm:px-6">
+      <SidebarTrigger />
+      <div className="flex-1">
+        <h1 className="text-xl font-bold sm:text-2xl">{title}</h1>
+        {description && (
+          <p className="text-muted-foreground text-sm">{description}</p>
+        )}
+      </div>
+      {action}
+    </header>
+  );
 }

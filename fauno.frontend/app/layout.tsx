@@ -1,41 +1,35 @@
-import { Work_Sans } from "next/font/google"
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { Work_Sans } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
-const workSans = Work_Sans({ 
-  subsets: ["latin"], // Especifique os subconjuntos necessários
-  display: "swap",    // Melhora a experiência de carregamento
-  weight: ["400"],
+const workSans = Work_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
+
+export const metadata = {
+  title: "Fauno",
+  description: "Agendamento para clínicas veterinárias",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
+      lang="pt-BR"
       suppressHydrationWarning
-      className={cn("antialiased", "font-mono", workSans.className)}
+      className={cn("antialiased", workSans.className)}
     >
       <body>
         <ThemeProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="flex gap-5 w-full">
-              <SidebarTrigger />
-              <div className="w-full">
-                {children}
-              </div>
-            </main>
-          </SidebarProvider>
+          {children}
+          <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
